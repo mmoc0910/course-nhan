@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-base leading-normal font-primary bg-lite;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .container {
+    @apply xl:w-[1300px] mx-auto px-5;
+  }
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+
+.quill {
+  @apply p-[15px] border border-strock rounded-lg w-full bg-inherit;
+}
+
+.quill .ql-toolbar.ql-snow {
+  @apply border-none bg-text4 rounded-lg bg-opacity-[0.3] max-w-max mx-auto p-3 mb-4;
+}
+.quill .ql-toolbar.ql-snow .ql-formats {
+  @apply mr-0;
+}
+.quill .ql-container.ql-snow {
+  @apply border-none p-[10px] w-full h-auto;
+}
+.quill .ql-editor.ql-blank::before {
+  @apply text-text4 text-sm font-medium not-italic left-[10px];
+}
+.quill .ql-editor {
+  @apply p-0 dark:text-white min-h-[320px];
+}
+.quill .ql-editor strong {
+  @apply font-semibold;
+}
+.quill .ql-editor p {
+  @apply mb-4;
+}
+.quill .ql-editor ol {
+  @apply list-disc pl-5 space-y-2 mb-4;
+}
+.quill .ql-editor img {
+  @apply inline-block;
+  @apply object-cover h-auto w-full my-5;
+}
+.quill .ql-container {
+  @apply text-base font-primary;
+}
