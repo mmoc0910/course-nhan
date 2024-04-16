@@ -24,7 +24,11 @@ const schema = yup
       .string()
       .required("Email không được để trống")
       .email("Không đúng định dạng email"),
-    password: yup.string().required("Mật khẩu không được để trống"),
+    password: yup
+      .string()
+      .required("Mật khẩu không được để trống")
+      .min(8, "Mật khẩu tối thiểu 8 ký tự")
+      .max(10, "Mật khẩu tối đa 10 ký tự"),
   })
   .required();
 const ChildPage = () => {
@@ -87,9 +91,7 @@ const ChildPage = () => {
   const columns: TableProps<AuthType>["columns"] = useMemo(
     () => [
       {
-        title: () => (
-          <p className="font-semibold font-primary">Họ và tên</p>
-        ),
+        title: () => <p className="font-semibold font-primary">Họ và tên</p>,
         dataIndex: "name",
         key: "name",
         render: (text) => <p className="font-primary">{text}</p>,

@@ -31,8 +31,11 @@ const schema = yup
       .string()
       .required("Email không được để trống")
       .email("Không đúng định dạng email"),
-    password: yup.string().required("Mật khẩu không được để trống"),
-    // .min(8, "Minimum of 8 characters"),
+    password: yup
+      .string()
+      .required("Mật khẩu không được để trống")
+      .min(8, "Mật khẩu tối thiểu 8 ký tự")
+      .max(10, "Mật khẩu tối đa 10 ký tự"),
     role: yup.number().required().positive().integer(),
   })
   .required();

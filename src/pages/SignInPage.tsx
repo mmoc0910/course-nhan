@@ -20,8 +20,11 @@ import { signIn } from "../store/auth/authSlice";
 const schema = yup
   .object({
     username: yup.string().required("Tên đăng nhập không được để trống"),
-    password: yup.string().required("Mật khẩu không được để trống"),
-    // .min(8, "Minimum of 8 characters"),
+    password: yup
+      .string()
+      .required("Mật khẩu không được để trống")
+      .min(8, "Mật khẩu tối thiểu 8 ký tự")
+      .max(10, "Mật khẩu tối đa 10 ký tự"),
   })
   .required();
 const SignInPage = () => {
@@ -42,15 +45,10 @@ const SignInPage = () => {
 
   React.useEffect(() => {
     if (auth) {
-      if (auth.role === 3) 
-        navigate("/teacher/dashboard");
-      if (auth.role === 2) 
-        navigate("/parent/child");
-      if (auth.role === 1) 
-        navigate("/account");
-      if (auth.role === 4) 
-        navigate("/admin/dashboard");
-      
+      if (auth.role === 3) navigate("/teacher/dashboard");
+      if (auth.role === 2) navigate("/parent/child");
+      if (auth.role === 1) navigate("/account");
+      if (auth.role === 4) navigate("/admin/dashboard");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
