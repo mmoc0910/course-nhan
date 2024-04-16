@@ -48,7 +48,7 @@ export type CourseDetailType = {
   rose: number;
   status: 0 | 1;
   approve: 0 | 1 | 2 | 3; // 1: approve 0:reject 2:pending 3:notsubmit
-  teacher: string;
+  teacher: AuthType;
   createdAt: Date;
   updatedAt: Date;
   subject: number;

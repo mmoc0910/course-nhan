@@ -6,7 +6,7 @@ import { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import LayoutCommon from "./layouts/layouts/LayoutCommon";
-import LayoutUser from "./layouts/layouts/LayoutAdmin";
+import LayoutDashboard from "./layouts/layouts/LayoutDashboard";
 // import LayoutUser from "./layouts/layouts/LayoutUser";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
@@ -43,6 +43,18 @@ const AcoountUserPage = lazy(
 const EditTestTeacherPage = lazy(
   () => import("./pages/teacher/EditTestTeacherPage")
 );
+const DashboardAdmin = lazy(
+  () => import("./pages/admin/DashboardAdmin")
+);
+const TeacherAdmin = lazy(
+  () => import("./pages/admin/TeacherAdmin")
+);
+const CourseAdmin = lazy(
+  () => import("./pages/admin/CourseAdmin")
+);
+const ChildPage = lazy(
+  () => import("./pages/parent/ChildPage")
+);
 
 function App() {
   return (
@@ -59,7 +71,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/course/:courseId" element={<CourseDetailPage />} />
           </Route>
-          <Route element={<LayoutUser />}>
+          <Route element={<LayoutDashboard />}>
             <Route
               path="/teacher/dashboard"
               element={<DashboardTeacherPage />}
@@ -96,6 +108,22 @@ function App() {
             <Route
               path="/account"
               element={<AcoountUserPage />}
+            />
+            <Route
+              path="/admin/dashboard"
+              element={<DashboardAdmin />}
+            />
+            <Route
+              path="/admin/teachers"
+              element={<TeacherAdmin />}
+            />
+            <Route
+              path="/admin/courses"
+              element={<CourseAdmin />}
+            />
+            <Route
+              path="/parent/child"
+              element={<ChildPage />}
             />
           </Route>
           <Route

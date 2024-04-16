@@ -164,7 +164,7 @@ const AddCourseTeacherPage = () => {
                                             setCategory({
                                               rank: item.id,
                                               class: i.id,
-                                              subject: ii.id
+                                              subject: ii.id,
                                             })
                                           }
                                         >

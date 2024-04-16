@@ -14,7 +14,7 @@ const CourseList: FC<CourseListProps> = ({ heading }) => {
   useEffect(() => {
     (async () => {
       try {
-        const result = await api.get<CourseType[]>(`/courses`);
+        const result = await api.get<CourseType[]>(`/courses?approve=1`);
         console.log("result - ", result.data);
         setCourses(result.data);
       } catch (error) {

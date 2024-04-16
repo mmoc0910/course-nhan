@@ -86,17 +86,15 @@ const SignupPage = () => {
           };
           console.log("certificateURL - ", certificateURL);
           await api.post("/auth/register", body);
+          toast("Đăng ký tài khoản thành công");
           navigate("/sign-in");
         } else {
           toast("Bạn chưa chọn chứng chỉ giáo viên");
         }
       } else {
-        if (role === 1) body = { name, username, password, email };
-        if (role === 2) body = { username, name, email, role, password };
-        await api.post(
-          role === 1 ? "/auth/register-for-child" : "/auth/register",
-          body
-        );
+        body = { username, name, email, role, password };
+        await api.post("/auth/register", body);
+        toast("Đăng ký tài khoản thành công");
         navigate("/sign-in");
       }
     } catch (error) {

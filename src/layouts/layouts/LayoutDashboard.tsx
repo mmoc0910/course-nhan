@@ -9,21 +9,39 @@ import { useEffect, useRef } from "react";
 import classNames from "../../utils/classNames";
 
 const SIDEBAR_WIDTH = 300;
-const menus = [
+const teacherMenus = [
   { title: "Dashboard", url: "/teacher/dashboard" },
   { title: "Khóa học", url: "/teacher/courses" },
   { title: "Tài khoản của tôi", url: "/account" },
 ];
-const LayoutUser = () => {
+const adminMenus = [
+  { title: "Dashboard", url: "/admin/dashboard" },
+  { title: "Giáo viên", url: "/admin/teachers" },
+  { title: "Khóa học", url: "/admin/courses" },
+];
+const parentMenus = [
+  { title: "Thêm tài khoản cho con", url: "/parent/child" },
+  { title: "Tài khoản của tôi", url: "/account" },
+];
+const studentMenus = [{ title: "Tài khoản của tôi", url: "/account" }];
+const LayoutDashboard = () => {
   const navigate = useNavigate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const { value, handleToogleValue } = useToogleValue();
   const headerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const menus =
+    auth?.role === 4
+      ? adminMenus
+      : auth?.role === 3
+      ? teacherMenus
+      : auth?.role === 2
+      ? parentMenus
+      : studentMenus;
   const handleSignOut = () => {
     dispatch(signOut());
-    navigate('/sign-in')
+    navigate("/sign-in");
   };
   useEffect(() => {
     if (headerRef.current && contentRef.current) {
@@ -127,4 +145,4 @@ const LayoutUser = () => {
   return;
 };
 
-export default LayoutUser;
+export default LayoutDashboard;

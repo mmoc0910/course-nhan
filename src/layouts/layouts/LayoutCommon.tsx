@@ -59,7 +59,15 @@ const LayoutCommon = () => {
             {auth ? (
               <>
                 <Link
-                  to={auth.role === 3 ? "/teacher/dashboard" : "/"}
+                  to={
+                    auth.role === 3
+                      ? "/teacher/dashboard"
+                      : auth.role === 4
+                      ? "/admin/dashboard"
+                      : auth.role === 2
+                      ? "/parent/child"
+                      : ""
+                  }
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <div className="w-10 h-10 rounded-full bg-slate-400" />

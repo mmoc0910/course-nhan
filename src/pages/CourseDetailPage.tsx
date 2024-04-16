@@ -61,7 +61,7 @@ const CourseDetailPage = () => {
             <p className="">
               Giáo viên:{" "}
               <Link to={"/"} className="font-medium text-primary">
-                {course.teacher}
+                {course.teacher.name}
               </Link>
             </p>
             <p className="">
@@ -133,7 +133,7 @@ const CourseDetailPage = () => {
                 />
               </TabContent>
               <TabContent>
-                <CourseTeacher teacher={course.teacher as string} />
+                <CourseTeacher teacher={course.teacher } />
               </TabContent>
               <TabContent>
                 <CourseRelated />

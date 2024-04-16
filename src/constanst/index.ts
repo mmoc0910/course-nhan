@@ -1,5 +1,7 @@
+import dayjs from "dayjs";
 import { Category } from "../types";
-
+export const DAY_FORMAT = (date: Date) =>
+  dayjs(date).format("DD-MM-YYYY HH:mm");
 export const listCategory: Category[] = [
   {
     id: 1,

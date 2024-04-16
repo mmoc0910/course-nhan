@@ -46,7 +46,9 @@ const AddTestTeacherPage = () => {
       console.log("data - ", data);
       const qa = questions.filter(
         (item) =>
-          item.question && item.correct && !item.answer.some((i) => i === "")
+          item.question &&
+          item.correct !== undefined &&
+          !item.answer.some((i) => i === "")
       );
       if (qa.length > 0) {
         await axiosPrivate.post("/tests", {
@@ -209,7 +211,11 @@ const QuestionItem = memo(
               type="button"
               className="col-span-2 w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
               onClick={() => {
-                if (question && correct && !answer.some((i) => i === "")) {
+                if (
+                  question &&
+                  correct !== undefined &&
+                  !answer.some((i) => i === "")
+                ) {
                   updateQuestions(index, question, answer, correct);
                   addQuestion();
                 } else {
