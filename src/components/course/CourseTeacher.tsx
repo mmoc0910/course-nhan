@@ -25,7 +25,7 @@ const CourseTeacher: FC<CourseTeacherProps> = ({ teacher }) => {
         <p className="text-2xl">
           Giáo viên:{" "}
           <Link to={"/"} className="font-semibold text-primary">
-            Nguyen Van A
+            {teacher.name}
           </Link>
         </p>{" "}
         <div className="mt-5">

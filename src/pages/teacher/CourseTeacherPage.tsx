@@ -88,12 +88,14 @@ const CourseTeacherPage = () => {
                   >
                     Bài học
                   </Link>
-                  <Link
-                    to={`/teacher/courses/add-course/${item._id}`}
-                    className="w-full py-2 rounded-lg bg-secondary20 text-white flex items-center justify-center text-sm"
-                  >
-                    Chỉnh sửa khóa học
-                  </Link>
+                  {item.approve !== 3 ? (
+                    <Link
+                      to={`/teacher/courses/add-course/${item._id}`}
+                      className="w-full py-2 rounded-lg bg-secondary20 text-white flex items-center justify-center text-sm"
+                    >
+                      Chỉnh sửa khóa học
+                    </Link>
+                  ) : null}
                 </div>
                 {item.approve === 3 ? (
                   <Tooltip title="Sau khi submit khóa học để admin phê duyệt bạn không thể chỉnh sửa khoa học cân nhắc trước khi làm điều đó">
