@@ -88,7 +88,7 @@ const ChildPage = () => {
     () => [
       {
         title: () => (
-          <p className="font-semibold font-primary">Tên giáo viên</p>
+          <p className="font-semibold font-primary">Họ và tên</p>
         ),
         dataIndex: "name",
         key: "name",

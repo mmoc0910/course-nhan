@@ -66,7 +66,7 @@ const LayoutCommon = () => {
                       ? "/admin/dashboard"
                       : auth.role === 2
                       ? "/parent/child"
-                      : ""
+                      : "/account"
                   }
                   className="flex items-center gap-2 cursor-pointer"
                 >
