@@ -11,6 +11,8 @@ import { CourseDetailType } from "../types";
 import { api } from "../api";
 import dayjs from "dayjs";
 import { VND } from "../constanst";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/configureStore";
 
 const tabs = [
   { title: "Nội dung học tập", key: "content" },
@@ -20,6 +22,7 @@ const tabs = [
   { title: " Q&A", key: "qa" },
 ];
 const CourseDetailPage = () => {
+  const { auth } = useSelector((state: RootState) => state.auth);
   const { courseId } = useParams();
   const [course, setCourse] = useState<CourseDetailType>();
   useEffect(() => {
@@ -105,15 +108,11 @@ const CourseDetailPage = () => {
                 </p> */}
               </div>
               <div className="mt-5 flex items-center gap-5">
-                {/* <button className="rounded-lg px-4 py-2 flex items-center justify-center bg-thirth text-white font-medium">
-                  Học thử miễn phí
-                </button> */}
-                <button
-                  className="rounded-lg px-4 py-2 flex items-center justify-center bg-thirth text-white font-medium"
-                  //  className="rounded-lg px-4 py-2 flex items-center justify-center font-medium border border-primary text-primary"
-                >
-                  Đăng ký ngay
-                </button>
+                {auth?.role === 4 || auth?.role === 3 ? null : (
+                  <button className="rounded-lg px-4 py-2 flex items-center justify-center bg-thirth text-white font-medium">
+                    Đăng ký ngay
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -133,7 +132,7 @@ const CourseDetailPage = () => {
                 />
               </TabContent>
               <TabContent>
-                <CourseTeacher teacher={course.teacher } />
+                <CourseTeacher teacher={course.teacher} />
               </TabContent>
               <TabContent>
                 <CourseRelated />
