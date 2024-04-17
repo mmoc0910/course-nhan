@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
-import {  useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
 import { api } from "../../api";
 import { AuthType, IntroduceType } from "../../types";
@@ -14,6 +14,8 @@ import { Label } from "../../components/label";
 import { Input } from "../../components/input";
 import ReactQuill from "react-quill";
 import { uploadFireStore } from "../../utils/uploadFireStore";
+import { signIn } from "../../store/auth/authSlice";
+import classNames from "../../utils/classNames";
 
 const modules = {
   toolbar: [
@@ -37,18 +39,19 @@ const schema = yup
   .object({
     email: yup
       .string()
-      .required("Tiêu đề bài học không được để trống")
+      .required("Email không được để trống")
       .email("Không đúng định dạng email"),
-    name: yup.string().required("Link video không được để trống"),
+    name: yup.string().required("Họ và tên không được để trống"),
     introduce: yup.string(),
   })
   .required();
 const AcoountUserPage = () => {
   const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
   const { auth } = useSelector((state: RootState) => state.auth);
   const [loading, setLoading] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<string>();
-  console.log('avatar - ', avatar)
+  console.log("avatar - ", avatar);
   const [file, setFile] = useState<File>();
   const { handleSubmit, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
@@ -87,17 +90,21 @@ const AcoountUserPage = () => {
       if (auth) {
         setLoading(true);
         console.log("data - ", data);
-        const { email, name, introduce } = data;
         let avatarURL = avatar;
         if (file) avatarURL = await uploadFireStore(file);
         const result = await axiosPrivate.patch<{ data: AuthType }>(
           `/users/${auth._id}`,
           {
-            email,
-            name,
-            description: JSON.stringify({ introduce, avatarURL }),
+            email: data.email,
+            name: data.name,
+            description: JSON.stringify({
+              introduce: data.introduce,
+              avatarURL,
+            }),
           }
         );
+        const { description, name, email } = result.data.data;
+        dispatch(signIn({ auth: { ...auth, name, email, description } }));
         console.log("result - ", result);
         toast("Chỉnh sửa thành công");
       }
@@ -115,7 +122,13 @@ const AcoountUserPage = () => {
     debouncedContentChange(value);
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3 gap-10">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={classNames(
+        "grid grid-cols-3 gap-10",
+        auth?.role === 1 || auth?.role === 2 ? "container mt-10" : ""
+      )}
+    >
       <div className="">
         <div className="w-3/4 aspect-square mx-auto">
           <div className="rounded-full w-full h-full relative">
@@ -130,7 +143,7 @@ const AcoountUserPage = () => {
                 className="w-full h-full object-cover rounded-full"
               />
             ) : (
-              <div className="w-full h-full bg-slate-300 rounded-full" />
+              <div className="w-full h-full bg-gray-200 rounded-full" />
             )}
 
             <label
@@ -179,7 +192,10 @@ const AcoountUserPage = () => {
           />
         </FormGroup>
       </div>
-      <button className="col-span-3 w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]">
+      <button
+        disabled={loading}
+        className="col-span-3 w-full disabled:cursor-not-allowed text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
+      >
         {loading ? (
           <div className="w-5 h-5 border-2 border-white border-b-transparent animate-spin rounded-full" />
         ) : (

@@ -1,14 +1,42 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import Logo from "../../components/logo/Logo";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
 import { signOut } from "../../store/auth/authSlice";
 import { getRoleLabel } from "../../constanst";
+import classNames from "../../utils/classNames";
+import { IntroduceType } from "../../types";
+import avatarDefault from "../../assets/images/avatar.png";
 
+const teacherMenus = [
+  { title: "Đến trang quản lý", url: "/teacher/dashboard" },
+];
+const adminMenus = [{ title: "Đến trang quản lý", url: "/admin/dashboard" }];
+const parentMenus = [
+  { title: "Thêm tài khoản cho con", url: "/parent/child" },
+  { title: "Thông tin tài khoản", url: "/account" },
+];
+const studentMenus = [{ title: "Thông tin tài khoản", url: "/account" }];
 const LayoutCommon = () => {
+  const navigate = useNavigate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
-  const handleSignOut = () => dispatch(signOut());
+  const handleSignOut = () => {
+    dispatch(signOut());
+    navigate('/sign-in')
+  };
+  const menus = auth?.role
+    ? auth.role === 1
+      ? studentMenus
+      : auth.role === 2
+      ? parentMenus
+      : auth.role === 3
+      ? teacherMenus
+      : adminMenus
+    : [];
+  const info = auth?.description
+    ? (JSON.parse(auth.description) as IntroduceType)
+    : undefined;
   return (
     <div className="">
       <div className="shadow-sm">
@@ -58,27 +86,55 @@ const LayoutCommon = () => {
             </div>
             {auth ? (
               <>
-                <Link
-                  to={
-                    auth.role === 3
-                      ? "/teacher/dashboard"
-                      : auth.role === 4
-                      ? "/admin/dashboard"
-                      : auth.role === 2
-                      ? "/parent/child"
-                      : "/account"
-                  }
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <div className="w-10 h-10 rounded-full bg-slate-400" />
-                  <div className="">
-                    <p className="font-semibold">{auth.username}</p>
-                    <p className="text-text3 text-sm">
-                      {getRoleLabel(auth.role)}
-                    </p>
+                <div className="relative group">
+                  <div className="absolute w-max top-[calc(100%+20px)] right-0 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-hover:top-full transition-all duration-300">
+                    <div className="mt-3 bg-white shadow-xl rounded-xl border border-border-gray">
+                      {menus.map((item, index) => (
+                        <NavLink
+                          key={index}
+                          to={item.url}
+                          className={({ isActive }) =>
+                            classNames(
+                              "px-7 py-2 flex items-center gap-2 cursor-pointer first:rounded-tl-xl first:rounded-tr-xl hover:bg-strock transition-all duration-200",
+                              isActive ? "bg-strock" : ""
+                            )
+                          }
+                        >
+                          <span className="shrink-0">{item.title}</span>
+                        </NavLink>
+                      ))}
+                      <div
+                        onClick={handleSignOut}
+                        className="px-7 py-2 flex items-center gap-2 cursor-pointer rounded-br-xl rounded-bl-xl hover:bg-strock transition-all duration-200"
+                      >
+                        <span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                            className="w-4 h-4 fill-current"
+                          >
+                            <path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z" />
+                          </svg>
+                        </span>
+                        <span className="shrink-0">Đăng xuất</span>
+                      </div>
+                    </div>
                   </div>
-                </Link>
-                <div
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <img
+                      className="w-10 h-10 rounded-full object-cover"
+                      src={info ? info.avatarURL : avatarDefault}
+                    />
+                    <div className="">
+                      <p className="font-semibold">{auth.username}</p>
+                      <p className="text-text3 text-sm">
+                        {getRoleLabel(auth.role)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* <div
                   onClick={handleSignOut}
                   className="px-5 py-2 rounded-lg border bg-thirth text-white flex items-center gap-2 cursor-pointer"
                 >
@@ -92,7 +148,7 @@ const LayoutCommon = () => {
                     </svg>
                   </span>
                   <span>Đăng xuất</span>
-                </div>
+                </div> */}
               </>
             ) : (
               <>

@@ -101,8 +101,8 @@ const AddTestTeacherPage = () => {
     []
   );
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-3">
-      <div className="col-span-3 grid grid-cols-2 gap-5 mb-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="">
+      <div className="grid grid-cols-2 gap-5 mb-5">
         <FormGroup>
           <Label htmlFor="title">Tiêu đề bài kiểm tra*</Label>
           <Input name="title" control={control} />
@@ -114,20 +114,23 @@ const AddTestTeacherPage = () => {
       </div>
       {questions.map((item, index) => (
         <QuestionItem
-          isAdd={index === questions.length - 1}
           key={uuidv4()}
           index={index}
           dquestion={item}
           updateQuestions={handleUpdateQuestions}
           addQuestion={handleAddQuestion}
           deleteQuestion={handleDeleteQuestion}
+          totalQues={questions.length}
         />
       ))}
-      <button className="col-span-3 mt-5 w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]">
+      <button
+        disabled={loading}
+        className="disabled:cursor-not-allowed w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
+      >
         {loading ? (
           <div className="w-5 h-5 border-2 border-white border-b-transparent animate-spin rounded-full" />
         ) : (
-          "Thêm bài kiểm tra mới"
+          "Chỉnh sửa bài kiểm tra"
         )}
       </button>
     </form>
@@ -136,16 +139,16 @@ const AddTestTeacherPage = () => {
 
 const QuestionItem = memo(
   ({
-    isAdd,
     index,
     dquestion,
     updateQuestions,
     addQuestion,
     deleteQuestion,
+    totalQues,
   }: {
-    isAdd: boolean;
     index: number;
     dquestion: QuestionType;
+    totalQues: number;
     updateQuestions: (
       index: number,
       question: string,
@@ -166,66 +169,69 @@ const QuestionItem = memo(
     //   // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, []);
     return (
-      <div className="p-5 rounded-xl border border-border-gray space-y-5">
-        <p>Câu hỏi {index + 1}</p>
-        <input
-          placeholder="Câu hỏi 1"
-          className="focus:border-primary text-black font-medium placeholder:text-text4 py-3 px-[25px] rounded-[10px] border border-solid w-full bg-inherit peer outline-none border-strock"
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-        />
-        {answer.map((item, index) => (
-          <div className="flex items-center gap-3">
-            <Checkbox
-              checked={correct === index}
-              onClick={() => setCorrect(index)}
-            />
-            <input
-              placeholder={`Câu trả lời ${index + 1}`}
-              className="focus:border-primary text-black font-medium placeholder:text-text4 py-3 px-[25px] rounded-[10px] border border-solid w-full bg-inherit peer outline-none border-strock"
-              type="text"
-              value={item}
-              onChange={(e) =>
-                setAnswer((prev) =>
-                  [...prev].map((it, ii) =>
-                    ii === index ? e.target.value : it
-                  )
-                )
-              }
-            />
-          </div>
-        ))}
+      <div className="px-5 py-2 rounded-xl border border-border-gray space-y-2">
         <div className="flex items-center gap-5">
-          {index > 0 && (
-            <button
-              type="button"
-              className="col-span-2 w-full text-white bg-error py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
-              onClick={() => deleteQuestion(index)}
-            >
-              Xóa
-            </button>
-          )}
-          {isAdd && (
-            <button
-              type="button"
-              className="col-span-2 w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
-              onClick={() => {
-                if (
-                  question &&
-                  correct !== undefined &&
-                  !answer.some((i) => i === "")
-                ) {
-                  updateQuestions(index, question, answer, correct);
-                  addQuestion();
-                } else {
-                  toast("Bạn chưa điền đầy đủ thông tin câu hỏi");
+          <p className="shrink-0">Câu hỏi {index + 1}</p>
+          <input
+            placeholder="Câu hỏi 1"
+            className="focus:border-primary text-black font-medium placeholder:text-text4 py-3 px-[25px] rounded-[10px] border border-solid w-full bg-inherit peer outline-none border-strock"
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-x-5 gap-y-2">
+          {answer.map((item, index) => (
+            <div className="flex items-center gap-3">
+              <Checkbox
+                checked={correct === index}
+                onClick={() => setCorrect(index)}
+              />
+              <input
+                placeholder={`Câu trả lời ${index + 1}`}
+                className="focus:border-primary text-black font-medium placeholder:text-text4 py-3 px-[25px] rounded-[10px] border border-solid w-full bg-inherit peer outline-none border-strock"
+                type="text"
+                value={item}
+                onChange={(e) =>
+                  setAnswer((prev) =>
+                    [...prev].map((it, ii) =>
+                      ii === index ? e.target.value : it
+                    )
+                  )
                 }
-              }}
-            >
-              Apply
-            </button>
-          )}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-3 w-1/5">
+          <button
+            type="button"
+            className="col-span-2 w-full text-white bg-error py-2 text-sm rounded-lg font-semibold flex items-center justify-center"
+            onClick={() => {
+              if (totalQues == 1) addQuestion();
+              deleteQuestion(index);
+            }}
+          >
+            Xóa
+          </button>
+          <button
+            type="button"
+            className="col-span-2 w-full text-white bg-primary py-2 text-sm rounded-lg font-semibold flex items-center justify-center"
+            onClick={() => {
+              if (
+                question &&
+                correct !== undefined &&
+                !answer.some((i) => i === "")
+              ) {
+                updateQuestions(index, question, answer, correct);
+                if (index + 1 === totalQues) addQuestion();
+              } else {
+                toast("Bạn chưa điền đầy đủ thông tin câu hỏi");
+              }
+            }}
+          >
+            Apply
+          </button>
         </div>
       </div>
     );

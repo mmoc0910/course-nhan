@@ -121,7 +121,7 @@ const ChildPage = () => {
     []
   );
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 container mt-10">
       <form
         className="grid grid-cols-2 gap-5"
         onSubmit={handleSubmit(onSubmit)}

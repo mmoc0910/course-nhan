@@ -79,7 +79,7 @@ const AddCourseTeacherPage = () => {
     <form className="grid grid-cols-4 gap-5" onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
         <Label htmlFor="poster">Poster*</Label>
-        <label htmlFor="poster" className="w-1/2 aspect-video">
+        <label htmlFor="poster" className="w-3/4 aspect-video">
           {!poster ? (
             <div className="w-full aspect-video rounded-xl border border-dashed border-text3 cursor-pointer flex items-center justify-center">
               Chọn ảnh
@@ -98,108 +98,112 @@ const AddCourseTeacherPage = () => {
             className="hidden"
           />
         </label>
-      </FormGroup>
-      <FormGroup>
-        <Label>Danh mục*</Label>
-        <DropdownWithComponents>
-          <DropdownWithComponents.Select
-            placeholder={
-              category ? (
-                <span className="text-black">
-                  {getCategoryById(listCategory, category.rank)?.title} {" / "}
-                  {getCategoryById(listCategory, category.class)?.title} {" / "}
-                  {getCategoryById(listCategory, category.subject)?.title}
-                </span>
-              ) : (
-                <span className="text-text4">Select one</span>
-              )
-            }
-          ></DropdownWithComponents.Select>
-          <DropdownWithComponents.List>
-            {listCategory.map((item) => {
-              const level = countLevels(item);
-              console.log("level - ", level);
-              return (
-                <DropdownWithComponents.Option
-                  key={uuidv4()}
-                  onClick={() => {}}
-                  className="!p-0"
-                >
-                  <div className="relative w-full group/a">
-                    <div className="flex items-center justify-between w-full px-5 py-4">
-                      <p>{item.title}</p>
-                      {level > 1 ? <ChevronRight className="w-3 h-3" /> : ""}
-                    </div>
-                    <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/a:visible group-hover/a:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock">
-                      {item.childrens &&
-                        item.childrens.map((i) => {
-                          const childLevel = countLevels(i);
-                          return (
-                            <div className="relative w-full group/b">
-                              <div
-                                className="flex items-center justify-between w-full px-5 py-4 bg-white"
-                                // onClick={() =>
-                                //   childLevel === 1 &&
-                                //   setCategory({
-                                //     rank: item.id,
-                                //     class: i.id,
-                                //   })
-                                // }
-                              >
-                                <p>{i.title}</p>
-                                {childLevel > 1 ? (
-                                  <ChevronRight className="w-3 h-3" />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/b:visible group-hover/b:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock overflow-hidden">
-                                {i.childrens &&
-                                  i.childrens.map((ii) => {
-                                    return (
-                                      <div className="relative w-full group/b">
-                                        <div
-                                          className="flex items-center justify-between w-full px-5 py-4 bg-white"
-                                          onClick={() =>
-                                            setCategory({
-                                              rank: item.id,
-                                              class: i.id,
-                                              subject: ii.id,
-                                            })
-                                          }
-                                        >
-                                          <p>{ii.title}</p>
+      </FormGroup>{" "}
+      <div className="col-span-3 grid grid-cols-2 gap-5">
+        <FormGroup>
+          <Label>Danh mục*</Label>
+          <DropdownWithComponents>
+            <DropdownWithComponents.Select
+              placeholder={
+                category ? (
+                  <span className="text-black">
+                    {getCategoryById(listCategory, category.rank)?.title}{" "}
+                    {" / "}
+                    {getCategoryById(listCategory, category.class)?.title}{" "}
+                    {" / "}
+                    {getCategoryById(listCategory, category.subject)?.title}
+                  </span>
+                ) : (
+                  <span className="text-text4">Select one</span>
+                )
+              }
+            ></DropdownWithComponents.Select>
+            <DropdownWithComponents.List>
+              {listCategory.map((item) => {
+                const level = countLevels(item);
+                console.log("level - ", level);
+                return (
+                  <DropdownWithComponents.Option
+                    key={uuidv4()}
+                    onClick={() => {}}
+                    className="!p-0"
+                  >
+                    <div className="relative w-full group/a">
+                      <div className="flex items-center justify-between w-full px-5 py-4">
+                        <p>{item.title}</p>
+                        {level > 1 ? <ChevronRight className="w-3 h-3" /> : ""}
+                      </div>
+                      <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/a:visible group-hover/a:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock">
+                        {item.childrens &&
+                          item.childrens.map((i) => {
+                            const childLevel = countLevels(i);
+                            return (
+                              <div className="relative w-full group/b">
+                                <div
+                                  className="flex items-center justify-between w-full px-5 py-4 bg-white"
+                                  // onClick={() =>
+                                  //   childLevel === 1 &&
+                                  //   setCategory({
+                                  //     rank: item.id,
+                                  //     class: i.id,
+                                  //   })
+                                  // }
+                                >
+                                  <p>{i.title}</p>
+                                  {childLevel > 1 ? (
+                                    <ChevronRight className="w-3 h-3" />
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/b:visible group-hover/b:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock overflow-hidden">
+                                  {i.childrens &&
+                                    i.childrens.map((ii) => {
+                                      return (
+                                        <div className="relative w-full group/b">
+                                          <div
+                                            className="flex items-center justify-between w-full px-5 py-4 bg-white"
+                                            onClick={() =>
+                                              setCategory({
+                                                rank: item.id,
+                                                class: i.id,
+                                                subject: ii.id,
+                                              })
+                                            }
+                                          >
+                                            <p>{ii.title}</p>
+                                          </div>
                                         </div>
-                                      </div>
-                                    );
-                                  })}
+                                      );
+                                    })}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                      </div>
                     </div>
-                  </div>
-                </DropdownWithComponents.Option>
-              );
-            })}
-          </DropdownWithComponents.List>
-        </DropdownWithComponents>
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="title">Tên khóa học*</Label>
-        <Input name="title" control={control} />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="price">Giá khóa học*</Label>
-        <Input name="price" control={control} type="number" min={10000} />
-      </FormGroup>
-      <FormGroup>
-        <Label htmlFor="rose">Phần trăm hoa hồng*</Label>
-        <Input name="rose" control={control} type="number" min={0} />
-      </FormGroup>
-      <FormGroup className="col-span-3">
+                  </DropdownWithComponents.Option>
+                );
+              })}
+            </DropdownWithComponents.List>
+          </DropdownWithComponents>
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="title">Tên khóa học*</Label>
+          <Input name="title" control={control} />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="price">Giá khóa học*</Label>
+          <Input name="price" control={control} type="number" min={10000} />
+        </FormGroup>
+        <FormGroup>
+          <Label htmlFor="rose">Phần trăm hoa hồng*</Label>
+          <Input name="rose" control={control} type="number" min={0} />
+        </FormGroup>
+      </div>
+      <FormGroup className="col-span-2">
         <Label htmlFor="description">Mô tả khóa học*</Label>
-        <Textarea name="description" control={control} />
+        <Textarea name="description" control={control}className="min-h-[200px]" />
       </FormGroup>
       <FormGroup className="col-span-2">
         <Label htmlFor="courseObjectives">Mục tiêu khóa học*</Label>
@@ -209,7 +213,10 @@ const AddCourseTeacherPage = () => {
           className="min-h-[200px]"
         />
       </FormGroup>
-      <button className="col-span-4 w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]">
+      <button
+        disabled={loading}
+        className="disabled:cursor-not-allowed col-span-4 w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
+      >
         {loading ? (
           <div className="w-5 h-5 border-2 border-white border-b-transparent animate-spin rounded-full" />
         ) : (

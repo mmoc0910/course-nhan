@@ -7,7 +7,7 @@ import { DAY_FORMAT } from "../../constanst";
 import { toast } from "react-toastify";
 import classNames from "../../utils/classNames";
 
-const TeacherAdmin = () => {
+const ApproveTeacher = () => {
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [teachers, setTeacher] = useState<AuthType[]>([]);
@@ -18,7 +18,7 @@ const TeacherAdmin = () => {
   const fetchData = async () => {
     try {
       const result = await axiosPrivate.get<AuthType[]>(
-        `/users?role=3&status=1`
+        `/users?role=3&status=0`
       );
       setTeacher(result.data);
     } catch (error) {
@@ -180,4 +180,4 @@ const TeacherAdmin = () => {
   );
 };
 
-export default TeacherAdmin;
+export default ApproveTeacher;

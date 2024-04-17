@@ -46,9 +46,8 @@ const Input: FC<InputType> = ({
         {...field}
       />
       {error && (
-        <div className="peer-focus:hidden w-full font-medium text-error absolute pointer-events-none h-full flex items-center justify-start px-[25px] top-0 left-0">
-          <p className="bg-inherit line-clamp-1 w-3/4 bg-lite">{error.message}</p>
-        </div>
+        <p className="ont-medium text-error">{error.message}
+        </p>
       )}
       {children}
     </div>

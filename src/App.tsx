@@ -2,11 +2,16 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "react-toastify/dist/ReactToastify.css";
 import "react-quill/dist/quill.snow.css";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import LayoutCommon from "./layouts/layouts/LayoutCommon";
 import LayoutDashboard from "./layouts/layouts/LayoutDashboard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/configureStore";
+import { api } from "./api";
+import { AuthType } from "./types";
+import { signIn } from "./store/auth/authSlice";
 // import LayoutUser from "./layouts/layouts/LayoutUser";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
@@ -37,26 +42,37 @@ const EditCourseTeacherPage = lazy(
 const AddTestTeacherPage = lazy(
   () => import("./pages/teacher/AddTestTeacherPage")
 );
-const AcoountUserPage = lazy(
-  () => import("./pages/user/AcoountUserPage")
-);
+const AcoountUserPage = lazy(() => import("./pages/user/AcoountUserPage"));
 const EditTestTeacherPage = lazy(
   () => import("./pages/teacher/EditTestTeacherPage")
 );
-const DashboardAdmin = lazy(
-  () => import("./pages/admin/DashboardAdmin")
-);
-const TeacherAdmin = lazy(
-  () => import("./pages/admin/TeacherAdmin")
-);
-const CourseAdmin = lazy(
-  () => import("./pages/admin/CourseAdmin")
-);
-const ChildPage = lazy(
-  () => import("./pages/parent/ChildPage")
-);
+const DashboardAdmin = lazy(() => import("./pages/admin/DashboardAdmin"));
+const TeacherAdmin = lazy(() => import("./pages/admin/TeacherAdmin"));
+const CourseAdmin = lazy(() => import("./pages/admin/CourseAdmin"));
+const ChildPage = lazy(() => import("./pages/parent/ChildPage"));
+const ApproveTeacher = lazy(() => import("./pages/admin/ApproveTeacher"));
+const ApproveCourseAdmin = lazy(() => import("./pages/admin/ApproveCourseAdmin"));
 
 function App() {
+  const { auth } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (auth) {
+      (async () => {
+        try {
+          const result = await api.get<AuthType>(`/users/${auth._id}`, {
+            headers: { Authorization: auth.accessToken },
+          });
+          const { description, email, name } = result.data;
+          dispatch(signIn({ auth: { ...auth, description, email, name } }));
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect;
   return (
     <>
       <Suspense
@@ -70,6 +86,8 @@ function App() {
           <Route element={<LayoutCommon />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/course/:courseId" element={<CourseDetailPage />} />
+            <Route path="/account" element={<AcoountUserPage />} />
+            <Route path="/parent/child" element={<ChildPage />} />
           </Route>
           <Route element={<LayoutDashboard />}>
             <Route
@@ -105,26 +123,20 @@ function App() {
               path="/teacher/courses/:courseId/lessons/:lessonId/edit-test/:testId"
               element={<EditTestTeacherPage />}
             />
-            <Route
+            {/* <Route
               path="/account"
               element={<AcoountUserPage />}
-            />
+            /> */}
+            <Route path="/admin/dashboard" element={<DashboardAdmin />} />
+            <Route path="/admin/teachers" element={<TeacherAdmin />} />
+            <Route path="/admin/account" element={<AcoountUserPage />} />
             <Route
-              path="/admin/dashboard"
-              element={<DashboardAdmin />}
+              path="/admin/approve-teachers"
+              element={<ApproveTeacher />}
             />
-            <Route
-              path="/admin/teachers"
-              element={<TeacherAdmin />}
-            />
-            <Route
-              path="/admin/courses"
-              element={<CourseAdmin />}
-            />
-            <Route
-              path="/parent/child"
-              element={<ChildPage />}
-            />
+            <Route path="/admin/courses" element={<CourseAdmin />} />
+            <Route path="/admin/approve-courses" element={<ApproveCourseAdmin />} />
+            <Route path="/teacher/account" element={<AcoountUserPage />} />
           </Route>
           <Route
             path="/course/:courseId/lesson/:lessonSlug"

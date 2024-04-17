@@ -12,7 +12,7 @@ import {
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
 
-const CourseAdmin = () => {
+const ApproveCourseAdmin = () => {
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseType[]>([]);
@@ -23,10 +23,8 @@ const CourseAdmin = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await api.get<CourseType[]>("/courses");
-      setCourses(
-        result.data.filter((item) => item.approve !== 3 && item.approve !== 2)
-      );
+      const result = await api.get<CourseType[]>("/courses?approve=2");
+      setCourses(result.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -165,4 +163,4 @@ const CourseAdmin = () => {
   );
 };
 
-export default CourseAdmin;
+export default ApproveCourseAdmin;
