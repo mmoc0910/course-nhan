@@ -133,14 +133,14 @@ const AddCourseTeacherPage = () => {
                         <p>{item.title}</p>
                         {level > 1 ? <ChevronRight className="w-3 h-3" /> : ""}
                       </div>
-                      <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/a:visible group-hover/a:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock">
+                      <div className="absolute w-max top-0 left-full bg-white invisible opacity-0 group-hover/a:visible group-hover/a:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock">
                         {item.childrens &&
                           item.childrens.map((i) => {
                             const childLevel = countLevels(i);
                             return (
                               <div className="relative w-full group/b">
                                 <div
-                                  className="flex items-center justify-between w-full px-5 py-4 bg-white"
+                                  className="flex items-center justify-between gap-10 w-full px-5 py-4 bg-white"
                                   // onClick={() =>
                                   //   childLevel === 1 &&
                                   //   setCategory({
@@ -156,7 +156,7 @@ const AddCourseTeacherPage = () => {
                                     ""
                                   )}
                                 </div>
-                                <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/b:visible group-hover/b:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock overflow-hidden">
+                                <div className="absolute w-max top-0 left-full bg-white invisible opacity-0 group-hover/b:visible group-hover/b:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock overflow-hidden">
                                   {i.childrens &&
                                     i.childrens.map((ii) => {
                                       return (

@@ -45,7 +45,7 @@ const SignInPage = () => {
 
   React.useEffect(() => {
     if (auth) {
-      if (auth.role === 3) navigate("/teacher/dashboard");
+      if (auth.role === 4) navigate("/admin/dashboard");
       else navigate("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
