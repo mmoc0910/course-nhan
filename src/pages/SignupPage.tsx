@@ -214,7 +214,10 @@ const SignupPage = () => {
             />
           </Input>
         </FormGroup>
-        <button className="w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]">
+        <button
+          disabled={loading}
+          className="disabled:cursor-not-allowed w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
+        >
           {loading ? (
             <div className="w-5 h-5 border-2 border-white border-b-transparent animate-spin rounded-full" />
           ) : (
