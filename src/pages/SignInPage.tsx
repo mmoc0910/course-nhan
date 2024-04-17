@@ -24,7 +24,7 @@ const schema = yup
       .string()
       .required("Mật khẩu không được để trống")
       .min(8, "Mật khẩu tối thiểu 8 ký tự")
-      .max(10, "Mật khẩu tối đa 10 ký tự"),
+      .max(30, "Mật khẩu tối đa 30 ký tự"),
   })
   .required();
 const SignInPage = () => {
