@@ -81,15 +81,10 @@ const StudentAdminPage = () => {
         key: "status",
         render: (_, record) => (
           <div className="font-primary flex items-center gap-2">
-            {record.status === 0 ? (
-              <Tag color="red">InActive</Tag>
-            ) : (
-              <Tag color="green">Active</Tag>
-            )}
             {record.enable === 0 ? (
-              <Tag color="pink">disable</Tag>
+              <Tag color="pink">Disable</Tag>
             ) : (
-              <Tag color="blue">enable</Tag>
+              <Tag color="blue">Enable</Tag>
             )}
           </div>
         ),

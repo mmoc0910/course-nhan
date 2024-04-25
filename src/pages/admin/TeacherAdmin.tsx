@@ -32,32 +32,6 @@ const TeacherAdmin = () => {
       console.log(error);
     }
   };
-  const handleApproveAccount = useCallback(async (_id: string) => {
-    try {
-      setLoading(true);
-      await axiosPrivate.get(`/users/approve-teacher/${_id}`);
-      fetchData();
-      toast("Approve account success");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const handleRejectAccount = useCallback(async (_id: string) => {
-    try {
-      setLoading(true);
-      await axiosPrivate.get(`/users/reject-teacher/${_id}`);
-      fetchData();
-      toast("Reject account success");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const handleUpdateEnableAccount = useCallback(
     async (_id: string, enable: boolean) => {
       try {
@@ -124,15 +98,10 @@ const TeacherAdmin = () => {
         key: "status",
         render: (_, record) => (
           <div className="font-primary flex items-center gap-2">
-            {record.status === 0 ? (
-              <Tag color="red">InActive</Tag>
-            ) : (
-              <Tag color="green">Active</Tag>
-            )}
             {record.enable === 0 ? (
-              <Tag color="pink">disable</Tag>
+              <Tag color="pink">Disable</Tag>
             ) : (
-              <Tag color="blue">enable</Tag>
+              <Tag color="blue">Enable</Tag>
             )}
           </div>
         ),
@@ -143,25 +112,6 @@ const TeacherAdmin = () => {
         key: "action",
         render: (_, record) => (
           <div className="font-primary flex items-center gap-2">
-            {record.status === 0 ? (
-              <>
-                <button
-                  onClick={() => handleApproveAccount(record._id)}
-                  type="button"
-                  className="px-2 py-1 rounded-lg font-semibold text-white bg-secondary20"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => handleRejectAccount(record._id)}
-                  type="button"
-                  className="px-2 py-1 rounded-lg font-semibold text-white bg-error"
-                >
-                  Reject
-                </button>
-              </>
-            ) : null}
-
             <button
               onClick={() =>
                 handleUpdateEnableAccount(record._id, !record.enable)
@@ -178,7 +128,7 @@ const TeacherAdmin = () => {
         ),
       },
     ],
-    [handleApproveAccount, handleRejectAccount, handleUpdateEnableAccount]
+    [handleUpdateEnableAccount]
   );
   return (
     <div className="rounded-xl border border-border-gray overflow-hidden">
