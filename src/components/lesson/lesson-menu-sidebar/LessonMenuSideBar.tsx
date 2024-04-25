@@ -1,50 +1,106 @@
-import { LessonMenuSidebarItem } from "./LessonMenuSidebarItem";
-const menus = [
-  {
-    title: "Chương 1: Giới thiệu khóa học",
-    childrens: [
-      { title: "Intro (Nhớ đọc mô tả quan trọng)", haveLearned: true },
-      { title: "Cài đặt vscode extensions và settings", haveLearned: true },
-      { title: "Cài đặt NodeJS và Git scm", haveLearned: true },
-      { title: "Cách đạt hiệu quả cao khi học khóa học", haveLearned: true },
-      {
-        title: "Cài đặt react dev tools và redux dev tools",
-        haveLearned: false,
-      },
-      { title: "Giới thiệu outline khóa học", haveLearned: false },
-    ],
-  },
-  {
-    title: "Chương 2: React cơ bản",
-    childrens: [
-      { title: "Intro (Nhớ đọc mô tả quan trọng)", haveLearned: true },
-      { title: "Cài đặt vscode extensions và settings", haveLearned: true },
-      { title: "Cài đặt NodeJS và Git scm", haveLearned: true },
-      { title: "Cách đạt hiệu quả cao khi học khóa học", haveLearned: true },
-      {
-        title: "Cài đặt react dev tools và redux dev tools",
-        haveLearned: false,
-      },
-      { title: "Giới thiệu outline khóa học", haveLearned: false },
-    ],
-  },
-  { title: "Chương 3: Tìm hiểu react hook useState" },
-  { title: "Chương 4: Styling trong React" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-  { title: "Chương 5: Tìm hiểu React hook useEffect" },
-];
-const LessonMenuSideBar = () => {
+import { FC } from "react";
+import CirclePlay from "../../../icons/CirclePlay";
+import { CourseType } from "../../../types";
+import { NavLink } from "react-router-dom";
+import classNames from "../../../utils/classNames";
+import CircleCheck from "../../../icons/CircleCheck";
+import { CircleXMark } from "../../../icons/CircleXMark";
+
+type LessonMenuSideBarProps = {
+  course: CourseType;
+  lessonComplete: number;
+  studentId?: string;
+};
+const LessonMenuSideBar: FC<LessonMenuSideBarProps> = ({
+  course,
+  lessonComplete,
+  studentId,
+}) => {
+  console.log("studentId - ", studentId);
+  if (!studentId)
+    return (
+      <ul>
+        {course.listLesson &&
+          course.listLesson.map((item) => {
+            const isPlay = item.order <= lessonComplete + 1;
+            if (isPlay)
+              return (
+                <NavLink
+                  to={`/course/${item.course}/lesson/${item._id}`}
+                  key={item._id}
+                  className={({ isActive }) =>
+                    classNames(
+                      "flex items-center gap-2 px-7 py-4",
+                      isActive ? "bg-[#dee9f3]" : "bg-[#dee9f361]"
+                    )
+                  }
+                >
+                  {item.order <= lessonComplete ? (
+                    <CircleCheck className="fill-primary" />
+                  ) : (
+                    <CirclePlay />
+                  )}
+
+                  <p>{item.title}</p>
+                </NavLink>
+              );
+            return (
+              <div
+                key={item._id}
+                className={classNames(
+                  "flex items-center gap-2 px-7 py-4 bg-[#dee9f361]"
+                )}
+              >
+                <CircleXMark className="fill-error" />
+                <p>{item.title}</p>
+              </div>
+            );
+          })}
+      </ul>
+    );
   return (
     <ul>
-      {menus.map((item, index) => (
-        <LessonMenuSidebarItem key={index} item={item} />
-      ))}
+      {course.listLesson &&
+        course.listLesson.map((item) => {
+          const isPlay = item.order <= lessonComplete + 1;
+          if (isPlay)
+            return (
+              <NavLink
+                to={`/student/${studentId}/course/${item.course}/lesson/${item._id}`}
+                key={item._id}
+                className={({ isActive }) =>
+                  classNames(
+                    "flex items-center gap-2 px-7 py-4",
+                    isActive ? "bg-[#dee9f3]" : "bg-[#dee9f361]"
+                  )
+                }
+              >
+                {item.order <= lessonComplete ? (
+                  <CircleCheck className="fill-primary" />
+                ) : (
+                  <CirclePlay />
+                )}
+
+                <p>{item.title}</p>
+              </NavLink>
+            );
+
+          return (
+            <NavLink
+              to={`/student/${studentId}/course/${item.course}/lesson/${item._id}`}
+              key={item._id}
+              className={({ isActive }) =>
+                classNames(
+                  "flex items-center gap-2 px-7 py-4",
+                  isActive ? "bg-[#dee9f3]" : "bg-[#dee9f361]"
+                )
+              }
+            >
+              <CircleXMark className="fill-error" />
+              <p>{item.title}</p>
+            </NavLink>
+          );
+        })}
     </ul>
   );
 };

@@ -11,11 +11,18 @@ import {
 } from "../../constanst";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const CourseAdmin = () => {
+  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseType[]>([]);
+  useEffect(() => {
+    dispatch(setBreadcumb([{ title: "Khóa học", url: "/admin/courses" }]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

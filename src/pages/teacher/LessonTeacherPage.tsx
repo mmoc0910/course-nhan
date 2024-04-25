@@ -4,8 +4,11 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { LessonType } from "../../types";
 import CirclePlay from "../../icons/CirclePlay";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const LessonTeacherPage = () => {
+  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const { courseId } = useParams();
   const [listLesson, setListLesson] = useState<LessonType[]>([]);
@@ -13,7 +16,21 @@ const LessonTeacherPage = () => {
     (max, item) => (item.order > max ? item.order : max),
     listLesson.length > 0 ? listLesson[0].order : 0
   );
-  console.log("max order", maxorder);
+  console.log("max order", maxorder); useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: '/teacher/courses',
+        },
+        {
+          title: "Danh sách bài học",
+          url: `/teacher/courses/lessons/${courseId}`,
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

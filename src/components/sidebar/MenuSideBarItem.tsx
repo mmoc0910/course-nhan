@@ -2,9 +2,10 @@ import { useState } from "react";
 import classNames from "../../utils/classNames";
 import { MenuItem } from "./MenuSidebar";
 import { v4 as uuidv4 } from "uuid";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Category } from "../../types";
 
-const MenuSideBarItem = ({ menuItem }: { menuItem: MenuItem }) => {
+const MenuSideBarItem = ({ menuItem }: { menuItem: Category }) => {
   return (
     <li className="hover:bg-gray-soft transition-all duration-200 cursor-pointer group">
       <div
@@ -30,7 +31,7 @@ const MenuSideBarItem = ({ menuItem }: { menuItem: MenuItem }) => {
           </p>
         ) : (
           <Link
-            to={`/category/${menuItem.title}`}
+            to={`/category/${menuItem.id}`}
             className="group-hover:text-primary transition-all duration-300"
           >
             {menuItem.title}
@@ -81,12 +82,17 @@ const MenuSideBarItemContent = ({ menuItem }: { menuItem: MenuItem[] }) => {
                     {item.title}
                   </p>
                 ) : (
-                  <Link
-                    to={`/category/${item.title}`}
-                    className="capitalize hover:text-primary transition-all duration-300 hover:underline hover:decoration-primary"
+                  <NavLink
+                    to={`/category/${item.id}`}
+                    className={({ isActive }) =>
+                      classNames(
+                        "capitalize hover:text-primary transition-all duration-300 hover:underline hover:decoration-primary",
+                        isActive ? "underline text-primary" : ""
+                      )
+                    }
                   >
                     {item.title}
-                  </Link>
+                  </NavLink>
                 )}
 
                 {item.childrens ? (
@@ -98,7 +104,6 @@ const MenuSideBarItemContent = ({ menuItem }: { menuItem: MenuItem[] }) => {
                     )}
                   >
                     {item.childrens.map((i) => {
-                      console.log("i - ", i);
                       if (i.childrens)
                         return (
                           <div className="mb-5">
@@ -109,7 +114,7 @@ const MenuSideBarItemContent = ({ menuItem }: { menuItem: MenuItem[] }) => {
                               <div className="grid grid-cols-4 gap-1">
                                 {i.childrens.map((o) => (
                                   <Link
-                                    to={`/category/${o.title}`}
+                                    to={`/category/${o.id}`}
                                     key={uuidv4()}
                                     className="capitalize hover:text-primary transition-all duration-300 hover:underline hover:decoration-primary"
                                   >
@@ -122,7 +127,7 @@ const MenuSideBarItemContent = ({ menuItem }: { menuItem: MenuItem[] }) => {
                         );
                       return (
                         <Link
-                          to={`/category/${i.title}`}
+                          to={`/category/${i.id}`}
                           key={uuidv4()}
                           className="capitalize hover:text-primary transition-all duration-300 hover:underline hover:decoration-primary"
                         >

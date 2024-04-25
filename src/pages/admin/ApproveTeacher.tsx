@@ -6,11 +6,17 @@ import { Link } from "react-router-dom";
 import { DAY_FORMAT } from "../../constanst";
 import { toast } from "react-toastify";
 import classNames from "../../utils/classNames";
+import { useDispatch } from "react-redux";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
-const ApproveTeacher = () => {
+const ApproveTeacher = () => {  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [teachers, setTeacher] = useState<AuthType[]>([]);
+  useEffect(() => {
+    dispatch(setBreadcumb([{ title: "Phê duyệt giáo viên", url: "/admin/approve-teachers" }]));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,30 +1,51 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import CourseTeacher from "../components/course/CourseTeacher";
 import CourseContent from "../components/course/CourseContent";
 import CourseRelated from "../components/course/CourseRelated";
-import CourseQuestion from "../components/course/CourseQuestion";
 import { Tab } from "../components/tab/Tab";
 import TabContent from "../components/tab/TabContent";
-import { CommentTab } from "../components/lesson/lesson-tabs/comment-tab/CommentTab";
-import { useEffect, useState } from "react";
-import { CourseDetailType } from "../types";
+import { ReactNode, useEffect, useState } from "react";
+import { CourseDetailType, LessonType, SubType } from "../types";
 import { api } from "../api";
 import dayjs from "dayjs";
 import { VND } from "../constanst";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/configureStore";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Chevron from "../icons/Chevron";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import RateCourse from "../components/course/RateCourse";
 
 const tabs = [
   { title: "Nội dung học tập", key: "content" },
   { title: "Giáo viên giảng dạy", key: "teacher" },
   { title: " Khóa học liên quan", key: "related" },
   { title: "Đánh giá", key: "rate" },
-  { title: " Q&A", key: "qa" },
 ];
 const CourseDetailPage = () => {
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const { courseId } = useParams();
   const [course, setCourse] = useState<CourseDetailType>();
+  const [listSub, setListSub] = useState<SubType[]>([]);
+  useEffect(() => {
+    fetchSub();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const fetchSub = async () => {
+    if (auth && auth.role === 1)
+      try {
+        const result = await axiosPrivate.get<SubType[]>(
+          `/subs?student=${auth._id}&course=${courseId}`
+        );
+        setListSub(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+  };
   useEffect(() => {
     (async () => {
       try {
@@ -35,6 +56,34 @@ const CourseDetailPage = () => {
       }
     })();
   }, [courseId]);
+  const handleCreateSub = async ({
+    course,
+    parent,
+    student,
+  }: {
+    parent?: string;
+    course: string;
+    student: string;
+  }) => {
+    if (auth)
+      try {
+        let body;
+        if (parent) body = { parent, course, student };
+        else body = { course, student };
+        await axiosPrivate.post(`/subs`, body);
+        fetchSub();
+        toast("Success");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log("error message: ", error);
+          toast(error.response?.data.message);
+          // navigate("/parent/child");
+        } else {
+          console.log("unexpected error: ", error);
+          return "An unexpected error occurred";
+        }
+      }
+  };
   if (course) {
     const { courseObjectives, description } = JSON.parse(
       course.description
@@ -46,7 +95,7 @@ const CourseDetailPage = () => {
       <div className="">
         <div className="container py-10">
           <div className="flex items-center gap-5">
-            <div className="flex items-center gap-2 px-5 py-2 rounded-full w-fit text-white font-medium bg-primary20">
+            {/* <div className="flex items-center gap-2 px-5 py-2 rounded-full w-fit text-white font-medium bg-primary20">
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +106,7 @@ const CourseDetailPage = () => {
                 </svg>
               </span>
               <p>666 đang học</p>
-            </div>
+            </div> */}
             <p className="text-3xl font-medium">{course.title}</p>
           </div>
           <div className="flex items-center gap-20 py-5">
@@ -80,19 +129,6 @@ const CourseDetailPage = () => {
                 src={course.poster}
                 className="w-full aspect-video object-cover"
               />
-              {/* <video
-                controls
-                controlsList="nodownload"
-                // poster={activeEpisode.poster}
-                
-              >
-                <source
-                  src={
-                    "https://cdn.glitch.me/cbf2cfb4-aa52-4a1f-a73c-461eef3d38e8/1080.mp4"
-                  }
-                  type="video/mp4"
-                />
-              </video> */}
             </div>
             <div className="col-span-4">
               <p>{description}</p>
@@ -100,18 +136,71 @@ const CourseDetailPage = () => {
                 Học trọn gói chỉ với
               </p>
               <div className="flex items-center">
-                <p className="text-xl font-semibold">
-                  {VND.format(course.price)} VND
+                <p className="text-2xl font-semibold">
+                  {VND.format(course.price)}USD
                 </p>
-                {/* <p className="text-base font-semibold text-error line-through decoration-error">
-                  1.200.000 VND
-                </p> */}
               </div>
               <div className="mt-5 flex items-center gap-5">
-                {auth?.role === 4 || auth?.role === 3 ? null : (
-                  <button className="rounded-lg px-4 py-2 flex items-center justify-center bg-thirth text-white font-medium">
-                    Đăng ký ngay
-                  </button>
+                {listSub.length > 0 ? (
+                  <ButtonGoLesson courseId={course._id}>
+                    Chi tiết khóa học
+                  </ButtonGoLesson>
+                ) : (
+                  <>
+                    {!auth ? (
+                      <Link
+                        to={`/sign-in`}
+                        className="rounded-lg px-4 py-2 flex items-center justify-center bg-primary text-white font-medium"
+                      >
+                        Mua khóa học
+                      </Link>
+                    ) : auth.role === 1 ? (
+                      <div className="flex items-center gap-5">
+                        <p className="font-semibold">Thanh toán với Paypal</p>
+                        <PayPalButtons
+                          onClick={(_data, actions) => {
+                            if (!auth) {
+                              navigate("/sign-in");
+                              return actions.reject();
+                            }
+                            return actions.resolve();
+                          }}
+                          style={{ layout: "horizontal", height: 35 }}
+                          createOrder={(_data, actions) => {
+                            return actions.order.create({
+                              purchase_units: [
+                                {
+                                  description: course.title,
+                                  amount: { value: String(course.price) },
+                                  currency_code: "USD",
+                                },
+                              ],
+                            });
+                          }}
+                          onApprove={async (_data, action) => {
+                            const order = action.order?.capture();
+                            console.log("order - ", order);
+                            auth &&
+                              handleCreateSub({
+                                course: course._id,
+                                student: auth._id,
+                              });
+                          }}
+                        />
+                      </div>
+                    ) : auth.role === 2 ? (
+                      <ButtonPayment
+                        courseId={course._id}
+                        amount={`${course.price}`}
+                        description={course.title}
+                        fetchSub={fetchSub}
+                      />
+                    ) : (
+                      <ButtonGoLesson courseId={course._id}>
+                        Chi tiết khóa học
+                      </ButtonGoLesson>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -135,26 +224,169 @@ const CourseDetailPage = () => {
                 <CourseTeacher teacher={course.teacher} />
               </TabContent>
               <TabContent>
-                <CourseRelated />
+                <CourseRelated course={course} />
               </TabContent>
               <TabContent>
-                <CommentTab />
-              </TabContent>
-              <TabContent>
-                <CourseQuestion />
+                <RateCourse courseId={course._id} />
               </TabContent>
             </Tab>
           </div>
         </div>
-        {/* <div className="container pt-10 pb-20">
-        {activeTab === "content" ?  : null}
-        {activeTab === "teacher" ? <CourseTeacher /> : null}
-        {activeTab === "related" ? <CourseRelated /> : null}
-        {activeTab === "qa" ? <CourseQuestion /> : null}
-      </div> */}
       </div>
     );
   }
+  return;
+};
+
+const ButtonPayment = ({
+  amount,
+  description,
+  fetchSub,
+  courseId,
+}: {
+  amount: string;
+  description: string;
+  fetchSub: () => void;
+  courseId: string;
+}) => {
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useSelector((state: RootState) => state.auth);
+  const children = useSelector((state: RootState) => state.children);
+  const [selectChildren, setSelectChildren] = useState<string>();
+  const handleCreateSub = async ({
+    course,
+    parent,
+    student,
+  }: {
+    parent: string;
+    course: string;
+    student: string;
+  }) => {
+    if (auth)
+      try {
+        await axiosPrivate.post(`/subs`, { parent, course, student });
+        fetchSub();
+        toast("Success");
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log("error message: ", error);
+          toast(error.response?.data.message);
+        } else {
+          console.log("unexpected error: ", error);
+          return "An unexpected error occurred";
+        }
+      }
+  };
+  const handleSelectChildren = async (studentId: string) => {
+    try {
+      const result = await axiosPrivate.get<SubType[]>(
+        `/subs?student=${studentId}`
+      );
+      if (result.data.length === 0) setSelectChildren(studentId);
+      else toast("Bạn đã đăng ký khóa học này cho con trước đó");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  if (auth)
+    return (
+      <div className="space-y-5">
+        <div className="relative group w-max">
+          <div className="rounded-lg flex items-center gap-5 px-4 py-2 bg-thirth text-white font-medium cursor-pointer">
+            <span>
+              {selectChildren
+                ? children.find((item) => item._id === selectChildren)?.name
+                : "Đăng ký ngay"}
+            </span>{" "}
+            <Chevron type="down" />
+          </div>
+          <div className="absolute z-30 min-w-full left-0 top-[calc(100%+2rem)] group-hover:top-full transition-all duration-300 invisible opacity-0 group-hover:visible group-hover:opacity-100">
+            <ul className="mt-1">
+              {children.map((item) => (
+                <li
+                  onClick={() => handleSelectChildren(item._id)}
+                  className="px-5 cursor-pointer py-2 first:rounded-tl-lg first:rounded-tr-lg last:rounded-bl-lg last:rounded-br-lg bg-thirth text-white"
+                >
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        {selectChildren ? (
+          <div className="flex items-center gap-5">
+            <p className="font-semibold">Thanh toán với Paypal</p>
+            <PayPalButtons
+              onClick={(_data, actions) => {
+                if (!auth) {
+                  navigate("/sign-in");
+                  return actions.reject();
+                }
+                return actions.resolve();
+              }}
+              style={{ layout: "horizontal", height: 35 }}
+              createOrder={(_data, actions) => {
+                return actions.order.create({
+                  purchase_units: [
+                    {
+                      description,
+                      amount: { value: amount },
+                      currency_code: "USD",
+                    },
+                  ],
+                });
+              }}
+              onApprove={async (_data, action) => {
+                const order = action.order?.capture();
+                console.log("order - ", order);
+                handleCreateSub({
+                  course: courseId,
+                  student: selectChildren,
+                  parent: auth._id,
+                });
+              }}
+            />
+          </div>
+        ) : null}
+      </div>
+    );
+};
+
+const ButtonGoLesson = ({
+  children,
+  courseId,
+}: {
+  children: ReactNode;
+  courseId: string;
+}) => {
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useSelector((state: RootState) => state.auth);
+  const [firstLessonId, setFirstLessonId] = useState<string>();
+  useEffect(() => {
+    (async () => {
+      if (auth)
+        try {
+          const result = await axiosPrivate.get<LessonType[]>(
+            `/lessons?course=${courseId}`
+          );
+          if (result.data.length > 0) setFirstLessonId(result.data[0]._id);
+        } catch (error) {
+          console.log(error);
+          // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  if (firstLessonId)
+    return (
+      <Link
+        to={`/course/${courseId}/lesson/${firstLessonId}`}
+        className="rounded-lg px-4 py-2 flex items-center justify-center bg-primary text-white font-medium"
+      >
+        {children}
+      </Link>
+    );
   return;
 };
 

@@ -35,7 +35,9 @@ export type CourseType = {
   createdAt: Date;
   updatedAt: Date;
   subject: number;
-  listLesson?: LessonType[];
+  listLesson: LessonType[];
+  totalTest: number;
+  totalLesson: number;
 };
 export type CourseDetailType = {
   _id: string;
@@ -67,7 +69,7 @@ export type LessonType = {
   course: string;
   createdAt: Date;
   updatedAt: Date;
-  test: TestType | undefined;
+  test: TestType;
 };
 
 export type TestType = {
@@ -83,4 +85,58 @@ export type TestType = {
 export type IntroduceType = {
   avatarURL?: string;
   introduce?: string;
+};
+
+export type QAType = { question: string; answer: string[]; correct: number };
+
+export type ResultLessonType = {
+  _id: string;
+  parent: AuthType;
+  student: AuthType;
+  test: TestType;
+  lesson: LessonType;
+  course: CourseType;
+  answer: string;
+  order: number;
+  totalQuestion: number;
+  totalCorrect: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type CommentType = {
+  _id: string;
+  user: AuthType;
+  content: string;
+  lesson: LessonType;
+  createdAt: Date;
+  updatedAt: Date;
+  replyComment?: {
+    _id: string;
+    user: string;
+    content: string;
+    lesson: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
+
+export type SubType = {
+  _id: string;
+  student: AuthType;
+  course: CourseType;
+  feeTeacher: number;
+  feeAdmin: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type RateType = {
+  _id: string;
+  course: CourseType;
+  user: AuthType;
+  content: string;
+  vote: number;
+  createdAt: Date;
+  updatedAt: Date;
 };

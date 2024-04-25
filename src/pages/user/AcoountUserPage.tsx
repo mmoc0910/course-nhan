@@ -16,6 +16,7 @@ import ReactQuill from "react-quill";
 import { uploadFireStore } from "../../utils/uploadFireStore";
 import { signIn } from "../../store/auth/authSlice";
 import classNames from "../../utils/classNames";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const modules = {
   toolbar: [
@@ -58,6 +59,17 @@ const AcoountUserPage = () => {
     mode: "onSubmit",
   });
   const introduceWatch = watch("introduce");
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Tài khoản của tôi",
+          url: auth?.role === 4 ? "/admin/account" : "/teacher/account",
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     if (auth) {
       fetchData();

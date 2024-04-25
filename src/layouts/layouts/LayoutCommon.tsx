@@ -7,23 +7,29 @@ import { getRoleLabel } from "../../constanst";
 import classNames from "../../utils/classNames";
 import { IntroduceType } from "../../types";
 import avatarDefault from "../../assets/images/avatar.png";
+import { useState } from "react";
 
 const teacherMenus = [
   { title: "Đến trang quản lý", url: "/teacher/dashboard" },
 ];
 const adminMenus = [{ title: "Đến trang quản lý", url: "/admin/dashboard" }];
 const parentMenus = [
+  { title: "Tài khoản của con", url: "/parent/list-child" },
   { title: "Thêm tài khoản cho con", url: "/parent/child" },
   { title: "Thông tin tài khoản", url: "/account" },
 ];
-const studentMenus = [{ title: "Thông tin tài khoản", url: "/account" }];
+const studentMenus = [
+  { title: "Khu vực học tập", url: "/my-class" },
+  { title: "Thông tin tài khoản", url: "/account" },
+];
 const LayoutCommon = () => {
   const navigate = useNavigate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  const [search, setSearch] = useState<string>("");
   const handleSignOut = () => {
     dispatch(signOut());
-    navigate('/sign-in')
+    navigate("/sign-in");
   };
   const menus = auth?.role
     ? auth.role === 1
@@ -43,12 +49,23 @@ const LayoutCommon = () => {
         <div className="flex items-center justify-between py-5 container">
           <div className="flex items-center gap-5">
             <Logo />
-            <div className="relative flex items-center">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                navigate(`/search?key=${search}`);
+              }}
+              className="relative flex items-center"
+            >
               <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 className="bg-strock rounded-lg pl-5 pr-14 py-2 min-w-60 font-light outline-none"
                 placeholder="Tìm kiếm khóa học..."
               />
-              <span className="absolute right-5 text-primary">
+              <span
+                className="absolute right-5 text-primary"
+                onClick={() => navigate(`/search?key=${search}`)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -64,7 +81,7 @@ const LayoutCommon = () => {
                   />
                 </svg>
               </span>
-            </div>
+            </form>
           </div>
           <div className="items-center flex gap-5">
             <div className="flex items-center gap-2 text-primary">

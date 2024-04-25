@@ -1,62 +1,51 @@
-import { ReplySVG } from "../../../../icons/ReplySVG";
+import { FC, useCallback, useEffect, useState } from "react";
+import { CommentType } from "../../../../types";
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
+import { CommentItem } from "./CommentItem";
+import { CommoentInput } from "./CommoentInput";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store/configureStore";
 
-
-export const CommentTab = () => {
+type CommentTabProps = { lessonId: string };
+export const CommentTab: FC<CommentTabProps> = ({ lessonId }) => {
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useSelector((state: RootState) => state.auth);
+  const [comments, setComments] = useState<CommentType[]>([]);
+  console.log("comments - ", comments);
+  useEffect(() => {
+    fetchComment();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessonId]);
+  const fetchComment = useCallback(async () => {
+    try {
+      const result = await axiosPrivate.get<CommentType[]>(
+        `/comments/?lesson=${lessonId}`
+      );
+      setComments(result.data.reverse());
+    } catch (error) {
+      console.log(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
-    <div>
-      <div className="border-b border-[rgb(222, 225, 243)] py-5 flex items-start gap-5">
-        <img
-          src="https://images.unsplash.com/photo-1712303700832-57d2b2b916b8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          className="w-12 h-12 rounded-full object-cover"
-        />
-        <div className="">
-          <p className="font-semibold text-lg">Nguyen Van B</p>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo
-            excepturi quidem nesciunt, adipisci quisquam nostrum et autem?
-            Architecto ipsam saepe illo nam, distinctio odio, vero cupiditate
-            cum fuga impedit dolorem?
+    <div className="h-full flex flex-col">
+      {auth && (auth.role === 4 || auth.role === 2) ? null : (
+        <CommoentInput lessonId={lessonId} handleFetchComment={fetchComment} />
+      )}
+      <div className="">
+        {comments.length > 0 ? (
+          comments.map((item) => (
+            <CommentItem
+              handleFetchComment={fetchComment}
+              comment={item}
+              key={item._id}
+            />
+          ))
+        ) : (
+          <p className="text-secondary text-center mt-10">
+            Chưa có bình luận nào...
           </p>
-          <div className="mt-2">
-            <ReplySVG className="fill-gray-400 cursor-pointer" />
-          </div>
-        </div>
-      </div>
-      <div className="border-b border-[rgb(222, 225, 243)] py-5 flex items-start gap-5">
-        <img
-          src="https://images.unsplash.com/photo-1712303700832-57d2b2b916b8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          className="w-12 h-12 rounded-full object-cover"
-        />
-        <div className="">
-          <p className="font-semibold text-lg">Nguyen Van B</p>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo
-            excepturi quidem nesciunt, adipisci quisquam nostrum et autem?
-            Architecto ipsam saepe illo nam, distinctio odio, vero cupiditate
-            cum fuga impedit dolorem?
-          </p>
-          <div className="mt-2">
-            <ReplySVG className="fill-gray-400 cursor-pointer" />
-          </div>
-        </div>
-      </div>
-      <div className="border-b border-[rgb(222, 225, 243)] py-5 flex items-start gap-5">
-        <img
-          src="https://images.unsplash.com/photo-1712303700832-57d2b2b916b8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          className="w-12 h-12 rounded-full object-cover"
-        />
-        <div className="">
-          <p className="font-semibold text-lg">Nguyen Van B</p>
-          <p className="">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illo
-            excepturi quidem nesciunt, adipisci quisquam nostrum et autem?
-            Architecto ipsam saepe illo nam, distinctio odio, vero cupiditate
-            cum fuga impedit dolorem?
-          </p>
-          <div className="mt-2">
-            <ReplySVG className="fill-gray-400 cursor-pointer" />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

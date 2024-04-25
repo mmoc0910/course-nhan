@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply text-base leading-normal font-primary bg-lite;
+    @apply text-base leading-normal font-primary bg-lite scroll-hidden;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

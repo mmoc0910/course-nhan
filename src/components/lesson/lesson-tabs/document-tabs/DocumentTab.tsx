@@ -1,18 +1,21 @@
-const DocumentTab = () => {
+import { FC } from "react";
+import { Link } from "react-router-dom";
+
+type DocumentTabProps = { documents: { title: string; url: string }[] };
+const DocumentTab: FC<DocumentTabProps> = ({ documents }) => {
   return (
     <div className="text-lg">
-      <div className="">
-        <span>Tài liệu 1: </span>
-        <span className="underline decoration-secondary text-secondary">
-          http://localhost:5173/course/:courseId/lesson/:lessonSlug
-        </span>
-      </div>
-      <div className="">
-        <span>Tài liệu 2: </span>
-        <span className="underline decoration-secondary text-secondary">
-          http://localhost:5173/course/:courseId/lesson/:lessonSlug
-        </span>
-      </div>
+      {documents.map((item, index) => (
+        <div key={index}>
+          <span>{item.title}: {" "}</span>
+          <Link
+            to={item.url} target="_blank"
+            className="underline decoration-secondary text-secondary"
+          >
+            {item.url}
+          </Link>
+        </div>
+      ))}
     </div>
   );
 };

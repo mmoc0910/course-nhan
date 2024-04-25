@@ -3,7 +3,7 @@ import * as yup from "yup";
 import FormGroup from "../../components/common/FormGroup";
 import { Label } from "../../components/label";
 import { Input } from "../../components/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DocumentType } from "../../types";
@@ -12,6 +12,8 @@ import ReactQuill from "react-quill";
 import _ from "lodash";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const modules = {
   toolbar: [
@@ -33,6 +35,7 @@ const schema = yup
   })
   .required();
 const AddLessonTeacherPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { courseId } = useParams();
@@ -44,6 +47,25 @@ const AddLessonTeacherPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: "/teacher/courses",
+        },
+        {
+          title: "Danh sách bài học",
+          url: `/teacher/courses/lessons/${courseId}`,
+        },
+        {
+          title: "Thêm bài học mới",
+          url: `/teacher/courses/add-lesson/${orderNumber}/${courseId}`,
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const descriptionWatch = watch("description");
   const onSubmit = async (data: {
     title: string;

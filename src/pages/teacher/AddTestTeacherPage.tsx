@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Checkbox } from "../../components/checkbox";
 import { toast } from "react-toastify";
@@ -10,6 +10,8 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import FormGroup from "../../components/common/FormGroup";
 import { Label } from "../../components/label";
 import { Input } from "../../components/input";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
+import { useDispatch } from "react-redux";
 
 type QuestionType = {
   question: string;
@@ -24,6 +26,7 @@ const schema = yup
   })
   .required();
 const AddTestTeacherPage = () => {
+  const dispatch = useDispatch();
   const { lessonId, courseId } = useParams();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
@@ -40,6 +43,25 @@ const AddTestTeacherPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: "/teacher/courses",
+        },
+        {
+          title: "Danh sách bài học",
+          url: `/teacher/courses/lessons/${courseId}`,
+        },
+        {
+          title: "Thêm bài kiểm tra",
+          url: `/teacher/courses/${courseId}/lessons/add-test/${lessonId}`,
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const onSubmit = async (data: { title: string; duration: number }) => {
     try {
       setLoading(true);

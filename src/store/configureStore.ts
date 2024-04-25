@@ -2,16 +2,20 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authSlice from "./auth/authSlice";
+import childrenSlice from "./auth/children/childrenSlice";
+import breadcumbSlice from "./breadcumb/breadcumbSlice";
 
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["auth"],
-  // blacklist: ["satisfy", "commision", "collab"],
+  blacklist: ["children", "breadcumb"],
 };
 
 const rootReducer = combineReducers({
   auth: authSlice,
+  children: childrenSlice,
+  breadcumb: breadcumbSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

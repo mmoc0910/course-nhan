@@ -164,83 +164,6 @@ export const listCategory: Category[] = [
   // },
 ];
 
-// export const listCategory: Category[] = [
-//   {
-//     id: 1,
-//     title: "Tiểu học",
-//     childrens: [
-//       {
-//         id: 2,
-//         title: "Lớp 1",
-//       },
-//       {
-//         id: 5,
-//         title: "Lớp 2",
-//       },
-//       {
-//         id: 8,
-//         title: "Lớp 3",
-//       },
-//       {
-//         id: 12,
-//         title: "Lớp 4",
-//       },
-//       {
-//         id: 16,
-//         title: "Lớp 4",
-//       },
-//     ],
-//   },
-//   {
-//     id: 20,
-//     title: "Trung học cơ sở",
-//     childrens: [
-//       {
-//         id: 21,
-//         title: "Lớp 6",
-//       },
-//       {
-//         id: 28,
-//         title: "Lớp 7",
-//       },
-//       {
-//         id: 35,
-//         title: "Lớp 8",
-//       },
-//       {
-//         id: 42,
-//         title: "Lớp 9",
-//       },
-//     ],
-//   },
-//   {
-//     id: 48,
-//     title: "Trung học phổ thông",
-//     childrens: [
-//       {
-//         id: 49,
-//         title: "Lớp 10",
-//       },
-//       {
-//         id: 58,
-//         title: "Lớp 11",
-//       },
-//       {
-//         id: 67,
-//         title: "Lớp 12",
-//       },
-//     ],
-//   },
-//   // {
-//   //   id: 76,
-//   //   title: "Cao đẳng - Đại học",
-//   //   childrens: [
-//   //     { id: 78, title: "Toán cao cấp" },
-//   //     { id: 79, title: "Toiec" },
-//   //   ],
-//   // },
-// ];
-
 const roles = [
   { role: 1, title: "Học sinh" },
   { role: 2, title: "Phụ huynh" },
@@ -280,7 +203,7 @@ export const countLevels = (category: Category): number => {
   }
 };
 
-export const VND = new Intl.NumberFormat("vi-VN", {
+export const VND = new Intl.NumberFormat("en-US", {
   // style: "currency",
-  currency: "VND",
+  currency: "USD",
 });

@@ -12,10 +12,13 @@ import { RootState } from "./store/configureStore";
 import { api } from "./api";
 import { AuthType } from "./types";
 import { signIn } from "./store/auth/authSlice";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import { setChildren } from "./store/auth/children/childrenSlice";
 // import LayoutUser from "./layouts/layouts/LayoutUser";
 const HomePage = lazy(() => import("./pages/HomePage"));
 const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
 const LessonDetailPage = lazy(() => import("./pages/user/LessonDetailPage"));
+const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const SignInPage = lazy(() => import("./pages/SignInPage"));
 const SignupPage = lazy(() => import("./pages/SignupPage"));
 const DashboardTeacherPage = lazy(
@@ -51,11 +54,49 @@ const TeacherAdmin = lazy(() => import("./pages/admin/TeacherAdmin"));
 const CourseAdmin = lazy(() => import("./pages/admin/CourseAdmin"));
 const ChildPage = lazy(() => import("./pages/parent/ChildPage"));
 const ApproveTeacher = lazy(() => import("./pages/admin/ApproveTeacher"));
-const ApproveCourseAdmin = lazy(() => import("./pages/admin/ApproveCourseAdmin"));
+const ApproveCourseAdmin = lazy(
+  () => import("./pages/admin/ApproveCourseAdmin")
+);
+const MyClassPage = lazy(() => import("./pages/user/MyClassPage"));
+const ChildrenClassPage = lazy(
+  () => import("./pages/parent/ChildrenClassPage")
+);
+const ChildrenLessonDetailPage = lazy(
+  () => import("./pages/parent/ChildrenLessonDetailPage")
+);
+const SearchPage = lazy(
+  () => import("./pages/SearchPage")
+);
+const StudentAdminPage = lazy(
+  () => import("./pages/admin/StudentAdminPage")
+);
+const ParentAdminPage = lazy(
+  () => import("./pages/admin/ParentAdminPage")
+);
+const MyCoursePage = lazy(
+  () => import("./pages/teacher/MyCoursePage")
+);
+const ListChilrenPage = lazy(
+  () => import("./pages/parent/ListChilrenPage")
+);
 
 function App() {
+  const axiosPrivate = useAxiosPrivate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      try {
+        if (auth && auth.role === 2) {
+          const result = await axiosPrivate.get<AuthType>(`/users/${auth._id}`);
+          dispatch(setChildren(result.data.children));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth]);
   useEffect(() => {
     if (auth) {
       (async () => {
@@ -88,6 +129,14 @@ function App() {
             <Route path="/course/:courseId" element={<CourseDetailPage />} />
             <Route path="/account" element={<AcoountUserPage />} />
             <Route path="/parent/child" element={<ChildPage />} />
+            <Route path="/parent/list-child" element={<ListChilrenPage />} />
+            <Route path="/category/:subjectId" element={<CategoryPage />} />
+            <Route path="/my-class" element={<MyClassPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route
+              path="/children/:childrenId"
+              element={<ChildrenClassPage />}
+            />
           </Route>
           <Route element={<LayoutDashboard />}>
             <Route
@@ -123,6 +172,10 @@ function App() {
               path="/teacher/courses/:courseId/lessons/:lessonId/edit-test/:testId"
               element={<EditTestTeacherPage />}
             />
+            <Route
+              path="/teacher/my-courses"
+              element={<MyCoursePage />}
+            />
             {/* <Route
               path="/account"
               element={<AcoountUserPage />}
@@ -135,12 +188,21 @@ function App() {
               element={<ApproveTeacher />}
             />
             <Route path="/admin/courses" element={<CourseAdmin />} />
-            <Route path="/admin/approve-courses" element={<ApproveCourseAdmin />} />
+            <Route path="/admin/students" element={<StudentAdminPage />} />
+            <Route path="/admin/parents" element={<ParentAdminPage />} />
+            <Route
+              path="/admin/approve-courses"
+              element={<ApproveCourseAdmin />}
+            />
             <Route path="/teacher/account" element={<AcoountUserPage />} />
           </Route>
           <Route
-            path="/course/:courseId/lesson/:lessonSlug"
+            path="/course/:courseId/lesson/:lessonId"
             element={<LessonDetailPage />}
+          />
+          <Route
+            path="/student/:studentId/course/:courseId/lesson/:lessonId"
+            element={<ChildrenLessonDetailPage />}
           />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignupPage />} />

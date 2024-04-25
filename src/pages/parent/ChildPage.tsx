@@ -15,6 +15,7 @@ import { useToogleValue } from "../../hooks/useToogleValue";
 import IconEyeToogle from "../../icons/IconEyeToogle";
 import { Table, TableProps } from "antd";
 import { DAY_FORMAT } from "../../constanst";
+import { Link } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -94,7 +95,11 @@ const ChildPage = () => {
         title: () => <p className="font-semibold font-primary">Họ và tên</p>,
         dataIndex: "name",
         key: "name",
-        render: (text) => <p className="font-primary">{text}</p>,
+        render: (text, record) => (
+          <Link to={`/children/${record._id}`} className="font-primary text-primary underline">
+            {text}
+          </Link>
+        ),
       },
       {
         title: () => (

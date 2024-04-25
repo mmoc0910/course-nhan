@@ -30,10 +30,10 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
               </svg>
             </span>
             <p className="text-xs">
-              <span className="font-medium text-primary">98</span> bài giảng
+              <span className="font-medium text-primary">{course.totalLesson}</span> bài giảng
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
             <p className="text-xs">
               <span className="font-medium text-primary">100</span> Câu hỏi
             </p>
-          </div>
+          </div> */}
         </div>
         <Link
           to={`/course/${course._id}`}

@@ -1,9 +1,26 @@
+import { useEffect, useState } from "react";
 import HomeBanner from "../components/banners/HomeBanner";
 import CourseList from "../components/home/CourseList";
 import Satify from "../components/home/Satify";
 import MenuSidebar from "../components/sidebar/MenuSidebar";
+import { CourseType } from "../types";
+import { api } from "../api";
 
 const HomePage = () => {
+  const [courses, setCourses] = useState<CourseType[]>([]);
+  console.log("course - ", courses);
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await api.get<CourseType[]>(`/courses?approve=1`);
+        console.log("result - ", result.data);
+        setCourses(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="">
       <div className="container grid grid-cols-10 gap-5">
@@ -21,9 +38,18 @@ const HomePage = () => {
         </div>
       </div>
       <Satify />
-      <CourseList heading="Tiểu học" />
-      <CourseList heading="Trung học cơ sở" />
-      <CourseList heading="Trung học phổ thông" />
+      <CourseList
+        heading="Tiểu học"
+        courses={courses.filter((item) => item.rank === 1)}
+      />
+      <CourseList
+        heading="Trung học cơ sở"
+        courses={courses.filter((item) => item.rank === 20)}
+      />
+      <CourseList
+        heading="Trung học phổ thông"
+        courses={courses.filter((item) => item.rank === 48)}
+      />
     </div>
   );
 };

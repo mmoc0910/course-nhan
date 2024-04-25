@@ -11,6 +11,8 @@ import FormGroup from "../../components/common/FormGroup";
 import { Label } from "../../components/label";
 import { Input } from "../../components/input";
 import { TestType } from "../../types";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
+import { useDispatch } from "react-redux";
 
 type QuestionType = {
   question: string;
@@ -25,16 +27,37 @@ const schema = yup
   })
   .required();
 const EditTestTeacherPage = () => {
+  const dispatch = useDispatch();
   const { lessonId, courseId, testId } = useParams();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   console.log("questions - ", questions);
-  const { handleSubmit, control, setValue } = useForm({
+  const { handleSubmit, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
+   const titleWatch = watch('title');
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: "/teacher/courses",
+        },
+        {
+          title: "Danh sách bài học",
+          url: `/teacher/courses/lessons/${courseId}`,
+        },
+        {
+          title: titleWatch,
+          url: `/teacher/courses/${courseId}/lessons/${lessonId}/edit-test/${testId}`,
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [titleWatch]);
   useEffect(() => {
     if (testId) {
       (async () => {
@@ -151,11 +174,14 @@ const EditTestTeacherPage = () => {
         >
           Xóa bài kiểm tra
         </button>
-        <button disabled={loading} className="disabled:cursor-not-allowed w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]">
+        <button
+          disabled={loading}
+          className="disabled:cursor-not-allowed w-full text-white bg-primary py-3 rounded-lg font-semibold flex items-center justify-center h-[48px]"
+        >
           {loading ? (
             <div className="w-5 h-5 border-2 border-white border-b-transparent animate-spin rounded-full" />
           ) : (
-            "Thêm bài kiểm tra"
+            "Chỉnh sửa bài kiểm tra"
           )}
         </button>
       </div>

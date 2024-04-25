@@ -1,7 +1,6 @@
 import { FC } from "react";
 import Heading from "../common/Heading";
 import { LessonType } from "../../types";
-import { Link } from "react-router-dom";
 
 type CourseContentProps = {
   courseObjectives: string;
@@ -37,9 +36,9 @@ const CourseContent: FC<CourseContentProps> = ({
           <Heading>Nội dung học tập</Heading>
           <ul>
             {listLesson.map((item) => (
-              <Link to={`/course/${item.course}/lesson/${item._id}`}
+              <div
                 key={item._id}
-                className="p-5 flex items-center gap-5 text-text2 cursor-pointer bg-[#dfe8f6]"
+                className="p-5 flex items-center gap-5 text-text2 bg-[#dfe8f6]"
               >
                 <span>
                   <svg
@@ -51,7 +50,7 @@ const CourseContent: FC<CourseContentProps> = ({
                   </svg>
                 </span>
                 <p className="font-medium text-lg">{item.title}</p>
-              </Link>
+              </div>
             ))}
           </ul>
         </div>

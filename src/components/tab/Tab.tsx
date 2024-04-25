@@ -65,6 +65,7 @@ export const Tab: FC<TabProps> = ({
         contentTab.style.width = `${
           listContentTab.length * wrappercontentTabWidth
         }px`;
+        console.log('wrappercontentTabWidth - ', wrappercontentTabWidth)
       }
       if (tabBarHeaderItemFirst) {
         console.log(

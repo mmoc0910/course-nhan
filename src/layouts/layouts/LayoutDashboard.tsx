@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { signOut } from "../../store/auth/authSlice";
 import { RootState } from "../../store/configureStore";
 import { getRoleLabel } from "../../constanst";
@@ -14,12 +14,15 @@ const SIDEBAR_WIDTH = 250;
 const teacherMenus = [
   { title: "Dashboard", url: "/teacher/dashboard" },
   { title: "Khóa học", url: "/teacher/courses" },
+  { title: "Khóa học của tôi", url: "/teacher/my-courses" },
   { title: "Tài khoản của tôi", url: "/teacher/account" },
 ];
 const adminMenus = [
   { title: "Dashboard", url: "/admin/dashboard" },
   { title: "Phê duyệt giáo viên", url: "/admin/approve-teachers" },
   { title: "Giáo viên", url: "/admin/teachers" },
+  { title: "Học viên", url: "/admin/students" },
+  { title: "Phụ huynh", url: "/admin/parents" },
   { title: "Phê duyệt khóa học", url: "/admin/approve-courses" },
   { title: "Khóa học", url: "/admin/courses" },
   { title: "Tài khoản của tôi", url: "/admin/account" },
@@ -27,8 +30,9 @@ const adminMenus = [
 const LayoutDashboard = () => {
   const navigate = useNavigate();
   const { auth } = useSelector((state: RootState) => state.auth);
+  const breadcumb = useSelector((state: RootState) => state.breadcumb);
   const dispatch = useDispatch();
-  const { value, handleToogleValue } = useToogleValue(true);
+  const { value } = useToogleValue(true);
   const headerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const menus =
@@ -56,26 +60,17 @@ const LayoutDashboard = () => {
           ref={headerRef}
         >
           <div className="flex items-center gap-5 flex-1">
-            {/* <div
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer"
-              // onClick={handleToogleValue}
-            >
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 512 512"
-                  className="w-4 h-4 fill-current"
-                >
-                  <path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM64 256c0-17.7 14.3-32 32-32H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H96c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z" />
-                </svg>
-              </span>
-            </div> */}
-            <div className="space-x-2 font-semibold text-lg">
-              <span className="text-text4 cursor-pointer">
-                Lorem, ipsum dolor
-              </span>
-              <span>/</span>
-              <span className="cursor-pointer">Lorem ipsum dolor sit amet</span>
+            <div className="font-semibold text-lg">
+              {breadcumb.map((item, index) => (
+                <span key={index}>
+                  <Link to={item.url} className="cursor-pointer">
+                    {item.title}
+                  </Link>
+                  {breadcumb.length > 1 && index < breadcumb.length - 1 && (
+                    <span> / </span>
+                  )}
+                </span>
+              ))}
             </div>
           </div>
           <Logo />

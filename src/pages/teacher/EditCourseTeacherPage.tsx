@@ -14,6 +14,8 @@ import { uploadFireStore } from "../../utils/uploadFireStore";
 import { useNavigate, useParams } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { CourseType } from "../../types";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
+import { useDispatch } from "react-redux";
 
 const schema = yup
   .object({
@@ -27,6 +29,8 @@ const schema = yup
   })
   .required();
 const EditCourseTeacherPage = () => {
+  const dispatch = useDispatch();
+
   const { courseId } = useParams();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -38,10 +42,26 @@ const EditCourseTeacherPage = () => {
   const [poster, setPoster] = useState<File>();
   const [loading, setLoading] = useState<boolean>(false);
   const [image, setImage] = useState<string>();
-  const { handleSubmit, control, setValue } = useForm({
+  const { handleSubmit, control, setValue, watch } = useForm({
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
+  const nameWatch = watch("title");
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: "/teacher/courses",
+        },
+        {
+          title: nameWatch,
+          url: `/teacher/courses/lessons/${courseId}`,
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courseId, nameWatch]);
   useEffect(() => {
     (async () => {
       try {
@@ -168,14 +188,14 @@ const EditCourseTeacherPage = () => {
                         <p>{item.title}</p>
                         {level > 1 ? <ChevronRight className="w-3 h-3" /> : ""}
                       </div>
-                      <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/a:visible group-hover/a:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock">
+                      <div className="absolute w-max top-0 left-full bg-white invisible opacity-0 group-hover/a:visible group-hover/a:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock">
                         {item.childrens &&
                           item.childrens.map((i) => {
                             const childLevel = countLevels(i);
                             return (
                               <div className="relative w-full group/b">
                                 <div
-                                  className="flex items-center justify-between w-full px-5 py-4 bg-white"
+                                  className="flex items-center gap-10 justify-between w-full px-5 py-4 bg-white"
                                   // onClick={() =>
                                   //   childLevel === 1 &&
                                   //   setCategory({
@@ -191,7 +211,7 @@ const EditCourseTeacherPage = () => {
                                     ""
                                   )}
                                 </div>
-                                <div className="absolute w-full top-0 -right-full bg-white invisible opacity-0 group-hover/b:visible group-hover/b:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock overflow-hidden">
+                                <div className="absolute w-max top-0 left-full bg-white invisible opacity-0 group-hover/b:visible group-hover/b:opacity-100 transition-all duration-200 rounded-lg shadow-lg border border-strock overflow-hidden">
                                   {i.childrens &&
                                     i.childrens.map((ii) => {
                                       return (
@@ -229,7 +249,7 @@ const EditCourseTeacherPage = () => {
         </FormGroup>
         <FormGroup>
           <Label htmlFor="price">Giá khóa học*</Label>
-          <Input name="price" control={control} type="number" min={10000} />
+          <Input name="price" control={control} type="number" min={1} />
         </FormGroup>
         <FormGroup>
           <Label htmlFor="rose">Phần trăm hoa hồng*</Label>

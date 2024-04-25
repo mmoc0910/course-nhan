@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../../store/configureStore";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { CourseType } from "../../types";
+import { CourseType, LessonType } from "../../types";
 import { Tooltip } from "antd";
 import { toast } from "react-toastify";
 import { Tab } from "../../components/tab/Tab";
 import TabContent from "../../components/tab/TabContent";
 import { ITab } from "../../components/tab/type";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const tabs: ITab[] = [
   { key: "1", title: "Đã được phê duyệt" },
@@ -16,13 +17,22 @@ const tabs: ITab[] = [
   { key: "0", title: "Bị từ chối" },
   { key: "3", title: "Chưa submit" },
 ];
-const CourseTeacherPage = () => {
+const CourseTeacherPage = () => {  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useSelector((state: RootState) => state.auth);
-  const [courses, setCourses] = useState<CourseType[]>([]);
+  const [courses, setCourses] = useState<CourseType[]>([]);useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: '/teacher/courses',
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     fetchData();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth]);
   const fetchData = async () => {
@@ -40,9 +50,20 @@ const CourseTeacherPage = () => {
   };
   const handleSubmitCourse = async (_id: string) => {
     try {
-      await axiosPrivate.patch(`/courses/${_id}`, { approve: 2 });
-      fetchData();
-      toast("Success");
+      const result = await axiosPrivate.get<LessonType[]>(
+        `/lessons?course=${_id}`
+      );
+      if (result.data.length > 0) {
+        if (result.data.some((item) => !item.test)) {
+          toast("Bạn chưa thêm đủ bài tập");
+        } else {
+          await axiosPrivate.patch(`/courses/${_id}`, { approve: 2 });
+          fetchData();
+          toast("Success");
+        }
+      } else {
+        toast("Bạn chưa thêm bài học");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -128,50 +149,84 @@ const CourseTeacherPage = () => {
   );
 };
 
-const Courseitem = ({
+export const Courseitem = ({
   item,
   handleSubmitCourse,
+  message = true,
 }: {
   item: CourseType;
   handleSubmitCourse: (_id: string) => void;
+  message?: boolean;
 }) => {
+  // const axiosPrivate = useAxiosPrivate();
+  // const { auth } = useSelector((state: RootState) => state.auth);
+  // const [firstLessonId, setFirstLessonId] = useState<string>();
+  // useEffect(() => {
+  //   (async () => {
+  //     if (auth)
+  //       try {
+  //         const result = await axiosPrivate.get<LessonType[]>(
+  //           `/lessons?course=${item._id}`
+  //         );
+  //         if (result.data.length > 0) setFirstLessonId(result.data[0]._id);
+  //       } catch (error) {
+  //         console.log(error);
+  //         // eslint-disable-next-line react-hooks/exhaustive-deps
+  //       }
+  //   })();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
   return (
     <div
-      className="w-full rounded-lg overflow-hidden border border-gray-soft shadow-xl"
+      className="w-full rounded-lg border border-gray-soft shadow-xl flex flex-col"
       key={item._id}
     >
-      <img src={item.poster} className="w-full h-[150px] object-cover" />
-      <div className="p-4 text-lg font-medium flex flex-col gap-4">
+      <img src={item.poster} className="w-full h-[150px] object-cover rounded-tr-lg rounded-tl-lg" />
+      <div className="p-4 text-lg font-medium flex flex-col justify-between gap-4 flex-1">
         <p className="line-clamp-2">{item.title}</p>
-
-        <div className="space-y-4 mt-auto">
-          {item.approve === 0 ? (
-            <p className="text-error text-center text-sm">
-              Khóa học của bạn bị từ chối vì vi phạm{" "}
-              <Link
-                to={"/"}
-                className="text-secondary underline decoration-secondary"
-              >
-                quy tắc cộng đồng
-              </Link>
-            </p>
-          ) : item.approve === 1 ? (
-            <p className="text-primary text-center text-sm">
-              Khóa học của bạn đã được phê duyệt
-            </p>
-          ) : item.approve === 2 ? (
-            <p className="text-secondary text-center text-sm">
-              Khóa học của bạn đang được phê duyệt
-            </p>
+        <div className="space-y-4">
+          {message ? (
+            <>
+              {item.approve === 0 ? (
+                <p className="text-error text-center text-sm">
+                  Khóa học của bạn bị từ chối vì vi phạm{" "}
+                  <Link
+                    to={"/"}
+                    className="text-secondary underline decoration-secondary"
+                  >
+                    quy tắc cộng đồng
+                  </Link>
+                </p>
+              ) : item.approve === 1 ? (
+                <p className="text-primary text-center text-sm">
+                  Khóa học của bạn đã được phê duyệt
+                </p>
+              ) : item.approve === 2 ? (
+                <p className="text-secondary text-center text-sm">
+                  Khóa học của bạn đang được phê duyệt
+                </p>
+              ) : (
+                ""
+              )}
+            </>
+          ) : null}
+          {item.approve === 3 ? (
+            <Link
+              to={`/teacher/courses/lessons/${item._id}`}
+              className="w-full py-2 cursor-pointer rounded-lg bg-primary text-white flex items-center justify-center text-sm mt-auto"
+            >
+              Bài học
+            </Link>
           ) : (
-            ""
+            <Link
+              to={`/course/${item._id}`}
+              target="_blank"
+              className="w-full py-2 cursor-pointer rounded-lg bg-primary text-white flex items-center justify-center text-sm mt-auto"
+            >
+              Chi tiết khóa học
+            </Link>
           )}
-          <Link
-            to={`/teacher/courses/lessons/${item._id}`}
-            className="w-full py-2 rounded-lg bg-primary text-white flex items-center justify-center text-sm mt-auto"
-          >
-            Bài học
-          </Link>
+
           {item.approve === 3 ? (
             <Link
               to={`/teacher/courses/add-course/${item._id}`}

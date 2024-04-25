@@ -12,6 +12,8 @@ import ReactQuill from "react-quill";
 import _ from "lodash";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
+import { useDispatch } from "react-redux";
 
 const modules = {
   toolbar: [
@@ -33,6 +35,7 @@ const schema = yup
   })
   .required();
 const EditLessonTeacherPage = () => {
+  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const { lessonId } = useParams();
   const navigate = useNavigate();
@@ -44,6 +47,26 @@ const EditLessonTeacherPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
+  const titleWatch = watch('title')
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: "/teacher/courses",
+        },
+        {
+          title: "Danh sách bài học",
+          url: `/teacher/courses/lessons/${courseId}`,
+        },
+        {
+          title: titleWatch,
+          url: `/teacher/courses/edit-lesson/${lessonId}`,
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [titleWatch]);
   useEffect(() => {
     (async () => {
       try {
@@ -60,7 +83,7 @@ const EditLessonTeacherPage = () => {
         console.log(error);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonId]);
 
   const descriptionWatch = watch("description");

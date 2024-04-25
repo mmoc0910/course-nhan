@@ -6,11 +6,18 @@ import { Link } from "react-router-dom";
 import { DAY_FORMAT } from "../../constanst";
 import { toast } from "react-toastify";
 import classNames from "../../utils/classNames";
+import { useDispatch } from "react-redux";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const TeacherAdmin = () => {
+  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [teachers, setTeacher] = useState<AuthType[]>([]);
+  useEffect(() => {
+    dispatch(setBreadcumb([{ title: "Giáo viên", url: "/admin/teachers" }]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +108,7 @@ const TeacherAdmin = () => {
             className="font-primary text-secondary"
             target="_blank"
           >
-            Click here to view
+            Xem chi tiết
           </Link>
         ),
       },

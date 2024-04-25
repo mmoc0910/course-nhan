@@ -2,7 +2,7 @@ import FormGroup from "../../components/common/FormGroup";
 import { Input, Textarea } from "../../components/input";
 import { Label } from "../../components/label";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -13,6 +13,8 @@ import { ChevronRight } from "../../icons/ChevronRight";
 import { uploadFireStore } from "../../utils/uploadFireStore";
 import { useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { useDispatch } from "react-redux";
+import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const schema = yup
   .object({
@@ -26,6 +28,22 @@ const schema = yup
   })
   .required();
 const AddCourseTeacherPage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      setBreadcumb([
+        {
+          title: "Khóa học",
+          url: "/teacher/courses",
+        },
+        {
+          title: "Thêm khóa học",
+          url: "/courses/add-course",
+        },
+      ])
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const [category, setCategory] = useState<{
@@ -194,7 +212,7 @@ const AddCourseTeacherPage = () => {
         </FormGroup>
         <FormGroup>
           <Label htmlFor="price">Giá khóa học*</Label>
-          <Input name="price" control={control} type="number" min={10000} />
+          <Input name="price" control={control} type="number" min={1} />
         </FormGroup>
         <FormGroup>
           <Label htmlFor="rose">Phần trăm hoa hồng*</Label>
@@ -203,7 +221,11 @@ const AddCourseTeacherPage = () => {
       </div>
       <FormGroup className="col-span-2">
         <Label htmlFor="description">Mô tả khóa học*</Label>
-        <Textarea name="description" control={control}className="min-h-[200px]" />
+        <Textarea
+          name="description"
+          control={control}
+          className="min-h-[200px]"
+        />
       </FormGroup>
       <FormGroup className="col-span-2">
         <Label htmlFor="courseObjectives">Mục tiêu khóa học*</Label>
