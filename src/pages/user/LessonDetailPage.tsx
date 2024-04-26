@@ -11,7 +11,7 @@ import DocumentTab from "../../components/lesson/lesson-tabs/document-tabs/Docum
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/configureStore";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { CourseType, LessonType } from "../../types";
+import { CourseType, LessonType, RateType } from "../../types";
 import { api } from "../../api";
 import classNames from "../../utils/classNames";
 import LearningProcess from "../../components/common/LearningProcess";
@@ -30,9 +30,23 @@ const LessonDetailPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [course, setCourse] = useState<CourseType>();
   const [lesson, setLesson] = useState<LessonType>();
-  const [lessonComplete, setLessonComplete] = useState<number>();
-
+  const [lessonComplete, setLessonComplete] = useState<number>(0);
+  const [haveRate, setHaveRate] = useState<boolean>(false);
+  useEffect(() => {
+    if (auth && courseId)
+      (async () => {
+        try {
+          const result = await axiosPrivate.get<RateType[]>(
+            `/rates/?course=${courseId}&user=${auth._id}`
+          );
+          if (result.data.length === 0) setHaveRate(true);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+  }, [auth, axiosPrivate, courseId]);
   console.log("lessonComplete - ", lessonComplete);
+  console.log("haveRate - ", haveRate);
   useEffect(() => {
     if (auth && (auth.role === 4 || auth.role === 3) && course)
       setLessonComplete(course.listLesson?.length);
@@ -140,7 +154,11 @@ const LessonDetailPage = () => {
             <div className="col-span-7 overflow-scroll scroll-hidden">
               <div className="px-20">
                 {tab === "b" ? (
-                  <LearningProcess courseId={course._id} studentId={auth._id} />
+                  <LearningProcess
+                    courseId={course._id}
+                    studentId={auth._id}
+                    course={course}
+                  />
                 ) : (
                   <>
                     {!loading && lesson ? (
@@ -171,7 +189,9 @@ const LessonDetailPage = () => {
                             }
                             studentId={auth._id}
                             isRate={
-                              lessonComplete === course.listLesson?.length - 1
+                              haveRate &&
+                              lessonComplete !== 0 &&
+                              lessonComplete === course.listLesson?.length
                             }
                           />
                         </TabContent>

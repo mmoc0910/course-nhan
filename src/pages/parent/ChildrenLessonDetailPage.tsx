@@ -112,6 +112,7 @@ const ChildrenLessonDetailPage = () => {
                 course={course}
                 lessonComplete={lessonComplete || 0}
                 studentId={studentId}
+                disabled={tab !== "a"}
               />
             </div>
           </div>
@@ -146,6 +147,7 @@ const ChildrenLessonDetailPage = () => {
               <div className="px-20">
                 {tab === "b" ? (
                   <LearningProcess
+                    course={course}
                     courseId={course._id}
                     studentId={studentId}
                   />
@@ -178,9 +180,7 @@ const ChildrenLessonDetailPage = () => {
                               setLessonComplete(value)
                             }
                             studentId={studentId}
-                            isRate={
-                              lessonComplete === course.listLesson?.length - 1
-                            }
+                            isRate={false}
                           />
                         </TabContent>
                         <TabContent>
