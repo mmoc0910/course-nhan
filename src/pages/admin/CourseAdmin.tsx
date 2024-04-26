@@ -11,6 +11,7 @@ import {
 } from "../../constanst";
 import { useDispatch } from "react-redux";
 import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
+import _ from 'lodash';
 
 const CourseAdmin = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const CourseAdmin = () => {
       setLoading(true);
       const result = await api.get<CourseType[]>("/courses");
       setCourses(
-        result.data.filter((item) => item.approve !== 3 && item.approve !== 2)
+        _.orderBy(result.data.filter((item) => item.approve !== 3 && item.approve !== 2), ['updatedAt', 'desc'])
       );
     } catch (error) {
       console.log(error);
