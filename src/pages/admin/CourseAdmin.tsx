@@ -97,7 +97,7 @@ const CourseAdmin = () => {
         render: (text) => <p className="font-primary">{DAY_FORMAT(text)}</p>,
       },
       {
-        title: () => <p className="font-semibold font-primary">Ngày cập nhật</p>,
+        title: () => <p className="font-semibold font-primary">Ngày phê duyệt</p>,
         key: "updatedAt",
         dataIndex: "updatedAt",
         render: (text) => <p className="font-primary">{DAY_FORMAT(text)}</p>,
