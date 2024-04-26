@@ -66,7 +66,7 @@ const ApproveCourseAdmin = () => {  const dispatch = useDispatch();
         dataIndex: "price",
         key: "price",
         render: (text) => (
-          <p className="font-primary">{VND.format(text)} VND</p>
+          <p className="font-primary">{VND.format(text)}USD</p>
         ),
       },
       {

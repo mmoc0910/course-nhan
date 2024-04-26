@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import { CourseType } from "../../types";
 import { api } from "../../api";
 import { Table, TableProps, Tag } from "antd";
@@ -9,14 +9,11 @@ import {
   getCategoryById,
   listCategory,
 } from "../../constanst";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 
 const CourseAdmin = () => {
   const dispatch = useDispatch();
-  const axiosPrivate = useAxiosPrivate();
   const [loading, setLoading] = useState<boolean>(false);
   const [courses, setCourses] = useState<CourseType[]>([]);
   useEffect(() => {
@@ -40,22 +37,6 @@ const CourseAdmin = () => {
       setLoading(false);
     }
   }, []);
-  const handleUpdateApproveCourse = useCallback(
-    async (_id: string, approve: 0 | 1) => {
-      try {
-        setLoading(true);
-        await axiosPrivate.patch(`/courses/${_id}`, { approve });
-        fetchData();
-        toast("Success");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
   const columns: TableProps<CourseType>["columns"] = useMemo(
     () => [
       {
@@ -69,9 +50,7 @@ const CourseAdmin = () => {
         title: () => <p className="font-semibold font-primary">Giá</p>,
         dataIndex: "price",
         key: "price",
-        render: (text) => (
-          <p className="font-primary">{VND.format(text)} VND</p>
-        ),
+        render: (text) => <p className="font-primary">{VND.format(text)}USD</p>,
       },
       {
         title: () => <p className="font-semibold font-primary">Hoa hồng</p>,
@@ -112,6 +91,12 @@ const CourseAdmin = () => {
         ),
       },
       {
+        title: () => <p className="font-semibold font-primary">Tạo ngày</p>,
+        key: "createdAt",
+        dataIndex: "createdAt",
+        render: (text) => <p className="font-primary">{DAY_FORMAT(text)}</p>,
+      },
+      {
         title: () => <p className="font-semibold font-primary">Trạng thái</p>,
         key: "approve",
         dataIndex: "approve",
@@ -128,42 +113,28 @@ const CourseAdmin = () => {
             )}
           </div>
         ),
-      },
-      {
-        title: () => <p className="font-semibold font-primary">Tạo ngày</p>,
-        key: "createdAt",
-        dataIndex: "createdAt",
-        render: (text) => <p className="font-primary">{DAY_FORMAT(text)}</p>,
-      },
-      {
-        title: () => <p className="font-semibold font-primary"></p>,
-        key: "approve",
-        dataIndex: "approve",
-        render: (text: 0 | 1 | 2, record) => (
-          <div className="font-primary flex items-center gap-2">
-            {text === 2 ? (
-              <>
-                <button
-                  onClick={() => handleUpdateApproveCourse(record._id, 1)}
-                  type="button"
-                  className="px-2 py-1 rounded-lg font-semibold text-white bg-primary20"
-                >
-                  Approve
-                </button>
-                <button
-                  onClick={() => handleUpdateApproveCourse(record._id, 0)}
-                  type="button"
-                  className="px-2 py-1 rounded-lg font-semibold text-white bg-secondary20"
-                >
-                  Reject
-                </button>
-              </>
-            ) : null}
-          </div>
-        ),
+        filters: [
+          {
+            text: "Đã hủy",
+            value: 0,
+          },
+          {
+            text: "Đã phê duyệt",
+            value: 1,
+          },
+        ],
+        onFilter: (value: boolean | Key, record) => {
+          if (typeof value === "boolean") {
+            // Xử lý trường hợp value là boolean
+            return record.approve === (value ? 1 : 0);
+          } else {
+            // Xử lý trường hợp value là Key (đối với trường hợp khi dùng dropdown filter)
+            return record.approve === value;
+          }
+        },
       },
     ],
-    [handleUpdateApproveCourse]
+    []
   );
   return (
     <div className="rounded-xl border border-border-gray overflow-hidden">

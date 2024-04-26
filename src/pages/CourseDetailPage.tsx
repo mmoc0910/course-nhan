@@ -170,7 +170,7 @@ const CourseDetailPage = () => {
                             return actions.order.create({
                               purchase_units: [
                                 {
-                                  description: course.title,
+                                  description,
                                   amount: { value: String(course.price) },
                                   currency_code: "USD",
                                 },
