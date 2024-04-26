@@ -24,6 +24,7 @@ export const TestTab: FC<TestTabProps> = ({
   studentId,
   isRate,
 }) => {
+  console.log("isRate - ", isRate);
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const [isStart, setIsStart] = useState<boolean>(
@@ -37,12 +38,18 @@ export const TestTab: FC<TestTabProps> = ({
   );
   console.log("answer - ", answers);
   const [loading, setLoading] = useState<boolean>(false);
-  const [resultTest, setResultTest] = useState<number>();
+  const [resultTest, setResultTest] = useState<number | undefined>();
+  const [isSave, setIsSave] = useState<boolean>(false);
+  console.log("resultTest - ", resultTest);
+  console.log("isStart - ", isStart);
   useEffect(() => {
     fetchData();
+    // setShowresult(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  useEffect(() => {
+    isRate && !resultTest && !isSave && showModal();
+  }, [isRate, isSave, resultTest]);
   const fetchData = async () => {
     if (auth)
       try {
@@ -58,6 +65,8 @@ export const TestTab: FC<TestTabProps> = ({
             ...answerParse,
             ...new Array(prev.length - answerParse.length).fill(""),
           ]);
+          setIsSave(true);
+          setShowresult(false);
         }
       } catch (error) {
         console.log(error);
@@ -83,7 +92,6 @@ export const TestTab: FC<TestTabProps> = ({
         fetchData();
         if (result.data) updateLessonComplete(result.data.lastOrder);
         toast("Success");
-        isRate && !resultTest && showModal();
         setIsStart(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -93,6 +101,16 @@ export const TestTab: FC<TestTabProps> = ({
           console.log("unexpected error: ", error);
           return "An unexpected error occurred";
         }
+        const iresultTest = questions.filter(
+          (item, index) => item.correct == answers[index]
+        );
+        console.log("result test - ", resultTest);
+        // setResultTest(resultTest.length)
+        setResultTest(iresultTest.length / answers.length);
+        setAnswers(answers);
+        setIsStart(false);
+        setShowresult(true);
+        setIsSave(false);
       } finally {
         setLoading(false);
       }
@@ -129,7 +147,7 @@ export const TestTab: FC<TestTabProps> = ({
           )}
         </div>
       ) : null}
-      {resultTest ? (
+      {resultTest !== undefined && !isStart ? (
         <p className="text-center mb-5 text-lg text-secondary font-semibold">
           Số điểm đã đạt được:{" "}
           <span className="text-secondary">{(resultTest * 10).toFixed(1)}</span>
@@ -137,14 +155,16 @@ export const TestTab: FC<TestTabProps> = ({
       ) : null}
       {!isStart ? (
         <div className="flex justify-center items-center mb-5 gap-5">
-          {resultTest ? (
+          {resultTest !== undefined ? (
             <>
-              <button
-                className="px-5 py-3 bg-primary20 text-white font-semibold rounded-lg"
-                onClick={() => setShowresult(true)}
-              >
-                Xem kết quả
-              </button>
+              {isSave && !showResult && (
+                <button
+                  className="px-5 py-3 bg-primary20 text-white font-semibold rounded-lg"
+                  onClick={() => setShowresult(true)}
+                >
+                  Xem kết quả
+                </button>
+              )}
               <button
                 className="px-5 py-3 bg-secondary20 text-white font-semibold rounded-lg"
                 onClick={() => {
@@ -225,8 +245,6 @@ export const TestTab: FC<TestTabProps> = ({
         >
           {loading ? (
             <div className="w-5 h-5 border-2 border-white border-b-transparent animate-spin rounded-full" />
-          ) : resultTest ? (
-            "Làm lại"
           ) : (
             "Nộp bài"
           )}

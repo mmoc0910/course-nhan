@@ -281,7 +281,7 @@ const ButtonPayment = ({
   const handleSelectChildren = async (studentId: string) => {
     try {
       const result = await axiosPrivate.get<SubType[]>(
-        `/subs?student=${studentId}`
+        `/subs?student=${studentId}&course=${courseId}`
       );
       if (result.data.length === 0) setSelectChildren(studentId);
       else toast("Bạn đã đăng ký khóa học này cho con trước đó");
