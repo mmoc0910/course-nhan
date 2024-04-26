@@ -113,8 +113,6 @@ const CourseAdmin = () => {
               <Tag color="red">Đã hủy</Tag>
             ) : text === 1 ? (
               <Tag color="green">Đã phê duyệt</Tag>
-            ) : text === 2 ? (
-              <Tag color="pink-inverse">Chờ phê duyệt</Tag>
             ) : (
               ""
             )}
@@ -122,12 +120,12 @@ const CourseAdmin = () => {
         ),
         filters: [
           {
-            text: "Đã hủy",
-            value: 0, 
-          },
-          {
             text: "Đã phê duyệt",
             value: 1,
+          },
+          {
+            text: "Đã hủy",
+            value: 0,
           },
         ],
         onFilter: (value: boolean | Key, record) => {
