@@ -27,10 +27,10 @@ const MyClassPage = () => {
   }, []);
   return (
     <div className="container mt-5">
-      <Heading>Khu vực học tập</Heading>
-      <p className="mt-2 text-lg font-medium">
+      <Heading>Khóa học của tôi</Heading>
+      {/* <p className="mt-2 text-lg font-medium">
         Khóa học, tài liệu mà bạn đăng ký sẽ được hiển thị dưới đây
-      </p>
+      </p> */}
       {myClass.length > 0 ? (
         <div className="mt-10 grid grid-cols-2 gap-10">
           {myClass.map((item) => {

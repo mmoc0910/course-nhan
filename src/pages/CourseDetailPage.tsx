@@ -137,7 +137,7 @@ const CourseDetailPage = () => {
               </p>
               <div className="flex items-center">
                 <p className="text-2xl font-semibold">
-                  {VND.format(course.price)}USD
+                  {VND.format(course.price)} USD
                 </p>
               </div>
               <div className="mt-5 flex items-center gap-5">
@@ -152,7 +152,7 @@ const CourseDetailPage = () => {
                         to={`/sign-in`}
                         className="rounded-lg px-4 py-2 flex items-center justify-center bg-primary text-white font-medium"
                       >
-                        Mua khóa học
+                        Đăng ký khóa học
                       </Link>
                     ) : auth.role === 1 ? (
                       <div className="flex items-center gap-5">
