@@ -28,10 +28,10 @@ const ChildrenClassPage = () => {
   }, []);
   return (
     <div className="container mt-5">
-      <Heading>Khu vực học tập</Heading>
-      <p className="mt-2 text-lg font-medium">
+      <Heading>Danh sách khóa học của con</Heading>
+      {/* <p className="mt-2 text-lg font-medium">
         Khóa học, tài liệu mà bạn đăng ký sẽ được hiển thị dưới đây
-      </p>
+      </p> */}
       {myClass.length > 0 ? (
         <div className="mt-10 grid grid-cols-2 gap-10">
           {myClass.map((item) => {
@@ -40,9 +40,9 @@ const ChildrenClassPage = () => {
         </div>
       ) : (
         <p className="mt-20 text-center">
-          Bạn chưa đăng ký khóa học nào{" "}
+          Bạn chưa đăng ký khóa học nào cho con! {" "}
           <Link to={"/"} className="text-primary underline font-semibold">
-            Xem khóa học
+            Tìm khóa học
           </Link>
         </p>
       )}

@@ -31,7 +31,7 @@ const SearchPage = () => {
           ))}
         </div>
       ) : (
-        <p className="mt-20 text-center text-secondary">Không tìm thấy két quả nào phù hợp.</p>
+        <p className="mt-20 text-center text-secondary">Không tìm thấy kết quả nào phù hợp.</p>
       )}
     </div>
   );

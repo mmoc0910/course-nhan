@@ -9,19 +9,25 @@ import { IntroduceType } from "../../types";
 import avatarDefault from "../../assets/images/avatar.png";
 import { useState } from "react";
 
+const adminMenus = [
+  { title: "Đến trang quản lý", url: "/admin/dashboard" }
+];
+
 const teacherMenus = [
   { title: "Đến trang quản lý", url: "/teacher/dashboard" },
 ];
-const adminMenus = [{ title: "Đến trang quản lý", url: "/admin/dashboard" }];
+
 const parentMenus = [
   { title: "Tài khoản của con", url: "/parent/list-child" },
   { title: "Thêm tài khoản cho con", url: "/parent/child" },
   { title: "Thông tin tài khoản", url: "/account" },
 ];
+
 const studentMenus = [
-  { title: "Khu vực học tập", url: "/my-class" },
+  { title: "Khóa học của tôi", url: "/my-class" },
   { title: "Thông tin tài khoản", url: "/account" },
 ];
+
 const LayoutCommon = () => {
   const navigate = useNavigate();
   const { auth } = useSelector((state: RootState) => state.auth);
@@ -35,10 +41,10 @@ const LayoutCommon = () => {
     ? auth.role === 1
       ? studentMenus
       : auth.role === 2
-      ? parentMenus
-      : auth.role === 3
-      ? teacherMenus
-      : adminMenus
+        ? parentMenus
+        : auth.role === 3
+          ? teacherMenus
+          : adminMenus
     : [];
   const info = auth?.description
     ? (JSON.parse(auth.description) as IntroduceType)
@@ -99,7 +105,7 @@ const LayoutCommon = () => {
                   />
                 </svg>
               </span>
-              <span>0123456789</span>
+              <span>+79533733420</span>
             </div>
             {auth ? (
               <>
@@ -238,7 +244,7 @@ const LayoutCommon = () => {
               >
                 Giới thiệu
               </Link>
-              <Link
+              {/* <Link
                 to={"/"}
                 className="hover:text-primary transition-all duration-200"
               >
@@ -249,7 +255,7 @@ const LayoutCommon = () => {
                 className="hover:text-primary transition-all duration-200"
               >
                 Học sinh tiêu biểu
-              </Link>
+              </Link> */}
               <Link
                 to={"/"}
                 className="hover:text-primary transition-all duration-200"
@@ -285,7 +291,7 @@ const LayoutCommon = () => {
               >
                 Ôn luyện
               </Link>
-              <Link
+              {/* <Link
                 to={"/"}
                 className="hover:text-primary transition-all duration-200"
               >
@@ -296,7 +302,7 @@ const LayoutCommon = () => {
                 className="hover:text-primary transition-all duration-200"
               >
                 ICANTECH - Đào tạo Công nghệ & Lập trình
-              </Link>
+              </Link> */}
             </div>
           </div>
           <div className="col-span-1 space-y-5">
@@ -312,13 +318,13 @@ const LayoutCommon = () => {
                 to={"/"}
                 className="hover:text-primary transition-all duration-200"
               >
-                Email: info@OTLICHNO.vn
+                Email: otlichno.edu@gmail.com
               </Link>
               <Link
                 to={"/"}
                 className="hover:text-primary transition-all duration-200"
               >
-                Đường dây nóng: 0123456789
+                Đường dây nóng: +79533733420
               </Link>
             </div>
           </div>
@@ -329,7 +335,7 @@ const LayoutCommon = () => {
                 to={"/"}
                 className="hover:text-primary transition-all duration-200"
               >
-                Email: info@OTLICHNO.vn
+                Email: otlichno.edu@gmail.com
               </Link>
               <Link
                 to={"/"}
@@ -348,7 +354,7 @@ const LayoutCommon = () => {
         </div>
         <div className="border-t border-t-border-gray py-3">
           <p className="text-center">
-            Copyright © 2024-2034 | All rights reserved OTLICHNO.vn
+            Copyright © 2024-2034 | All rights reserved OTLICHNO
           </p>
         </div>
       </div>

@@ -30,7 +30,7 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
               </svg>
             </span>
             <p className="text-xs">
-              <span className="font-medium text-primary">{course.totalLesson}</span> bài giảng
+              <span className="font-medium text-primary">{course.totalLesson}</span> bài học
             </p>
           </div>
           {/* <div className="flex items-center gap-2">

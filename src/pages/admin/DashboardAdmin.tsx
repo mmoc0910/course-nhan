@@ -55,13 +55,13 @@ const DashboardAdmin = () => {
         <div className="border border-border-gray rounded-xl p-5 space-y-5">
           <p className="text-2xl font-semibold">Tổng tiền của giáo viên</p>
           <p className="text-3xl font-bold">
-            {satify.totalFreeTeacher ? VND.format(satify.totalFreeTeacher) : 0}USD
+            {satify.totalFreeTeacher ? VND.format(satify.totalFreeTeacher) : 0} USD
           </p>
         </div>
         <div className="border border-border-gray rounded-xl p-5 space-y-5">
           <p className="text-2xl font-semibold">Tổng tiền của admin</p>
           <p className="text-3xl font-bold">
-            {satify.totalFreeAdmin ? VND.format(satify.totalFreeAdmin) : 0}USD
+            {satify.totalFreeAdmin ? VND.format(satify.totalFreeAdmin) : 0} USD
           </p>
         </div>
       </div>
