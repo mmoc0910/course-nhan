@@ -30,7 +30,7 @@ const CourseAdmin = () => {
       setLoading(true);
       const result = await api.get<CourseType[]>("/courses");
       setCourses(
-        _.orderBy(result.data.filter((item) => item.approve !== 3 && item.approve !== 2), ['updatedAt'], ["desc"])
+        _.orderBy(result.data.filter((item) => item.approve !== 3 && item.approve !== 2), ['updatedAt', 'desc'])
       );
     } catch (error) {
       console.log(error);
