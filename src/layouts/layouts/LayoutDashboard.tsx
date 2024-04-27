@@ -12,13 +12,13 @@ import avatarDefault from "../../assets/images/avatar.png";
 
 const SIDEBAR_WIDTH = 250;
 const teacherMenus = [
-  { title: "Dashboard", url: "/teacher/dashboard" },
-  { title: "Khóa học", url: "/teacher/courses" },
+  { title: "Thống kê", url: "/teacher/dashboard" },
+  { title: "Đăng ký khóa học", url: "/teacher/courses" },
   { title: "Khóa học của tôi", url: "/teacher/my-courses" },
   { title: "Tài khoản của tôi", url: "/teacher/account" },
 ];
 const adminMenus = [
-  { title: "Dashboard", url: "/admin/dashboard" },
+  { title: "Thống kê", url: "/admin/dashboard" },
   { title: "Phê duyệt giáo viên", url: "/admin/approve-teachers" },
   { title: "Giáo viên", url: "/admin/teachers" },
   { title: "Học viên", url: "/admin/students" },
