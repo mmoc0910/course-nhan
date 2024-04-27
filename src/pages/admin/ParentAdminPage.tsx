@@ -35,7 +35,7 @@ const ParentAdminPage = () => {
     async (_id: string, enable: boolean) => {
       try {
         setLoading(true);
-        await axiosPrivate.patch(`/users/${_id}`, { enable: enable ? 1 : 0 });
+        await axiosPrivate.patch(`/users/blockAccount/${_id}`, { enable: enable ? 1 : 0 });
         fetchData();
         toast("Success");
       } catch (error) {
