@@ -215,7 +215,7 @@ const AddCourseTeacherPage = () => {
           <Input name="price" control={control} type="number" min={1} />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="rose">Phần trăm hoa hồng*</Label>
+          <Label htmlFor="rose">Phần trăm hoa hồng của Admin*</Label>
           <Input name="rose" control={control} type="number" min={0} />
         </FormGroup>
       </div>
