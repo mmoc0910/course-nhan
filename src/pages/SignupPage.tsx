@@ -194,7 +194,7 @@ const SignupPage = () => {
                   </svg>
                 </span>
                 <p className="line-clamp-1">
-                  {certificate ? certificate.name : "Upload chứng chỉ của bạn"}
+                  {certificate ? certificate.name : "Upload chứng chỉ của bạn (PDF)"}
                 </p>
               </div>
             </label>

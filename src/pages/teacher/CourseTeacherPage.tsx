@@ -15,7 +15,7 @@ const tabs: ITab[] = [
   { key: "1", title: "Đã được phê duyệt" },
   { key: "2", title: "Chờ phê duyệt" },
   { key: "0", title: "Bị từ chối" },
-  { key: "3", title: "Chưa submit" },
+  { key: "3", title: "Chưa gửi đăng ký" },
 ];
 const CourseTeacherPage = () => {  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
@@ -215,7 +215,7 @@ export const Courseitem = ({
               to={`/teacher/courses/lessons/${item._id}`}
               className="w-full py-2 cursor-pointer rounded-lg bg-primary text-white flex items-center justify-center text-sm mt-auto"
             >
-              Bài học
+              Chỉnh sửa nội dung khóa học
             </Link>
           ) : (
             <Link
@@ -232,7 +232,7 @@ export const Courseitem = ({
               to={`/teacher/courses/add-course/${item._id}`}
               className="w-full py-2 rounded-lg bg-secondary20 text-white flex items-center justify-center text-sm"
             >
-              Chỉnh sửa khóa học
+              Chỉnh sửa thông tin khóa học
             </Link>
           ) : null}
         </div>
@@ -242,7 +242,7 @@ export const Courseitem = ({
               onClick={() => handleSubmitCourse(item._id)}
               className="w-full py-2 rounded-lg bg-error text-white flex items-center justify-center text-sm"
             >
-              Submit khóa học
+              Gửi đăng ký khóa học
             </button>
           </Tooltip>
         ) : null}
