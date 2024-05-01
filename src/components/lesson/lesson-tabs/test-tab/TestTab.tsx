@@ -24,7 +24,7 @@ export const TestTab: FC<TestTabProps> = ({
   studentId,
   isRate,
 }) => {
-  console.log("isRate - ", isRate);
+  // console.log("isRate - ", isRate);
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useSelector((state: RootState) => state.auth);
   const [isStart, setIsStart] = useState<boolean>(
@@ -34,14 +34,15 @@ export const TestTab: FC<TestTabProps> = ({
   const questions = JSON.parse(test.qa) as QAType[];
   const [showResult, setShowresult] = useState<boolean>(false);
   const [answers, setAnswers] = useState<(number | undefined)[]>(
-    new Array(questions.length).fill("")
+    new Array(questions.length).fill(undefined)
   );
   console.log("answer - ", answers);
+  console.log("questions - ", questions);
   const [loading, setLoading] = useState<boolean>(false);
   const [resultTest, setResultTest] = useState<number | undefined>();
   const [isSave, setIsSave] = useState<boolean>(false);
-  console.log("resultTest - ", resultTest);
-  console.log("isStart - ", isStart);
+  // console.log("resultTest - ", resultTest);
+  // console.log("isStart - ", isStart);
   useEffect(() => {
     fetchData();
     // setShowresult(false);
@@ -69,14 +70,14 @@ export const TestTab: FC<TestTabProps> = ({
           setShowresult(false);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
   };
   const handleSubmitTest = async () => {
     if (auth)
       try {
         setLoading(true);
-        console.log('answers.join(",") - ', answers.join(","));
+        // console.log('answers.join(",") - ', answers.join(","));
         await axiosPrivate.post(`/results`, {
           student: auth._id,
           test: test._id,
@@ -101,10 +102,12 @@ export const TestTab: FC<TestTabProps> = ({
           console.log("unexpected error: ", error);
           return "An unexpected error occurred";
         }
+        // questions.forEach((item, index)=> console.log(`câu hỏi ${item.question}:`, item))
         const iresultTest = questions.filter(
-          (item, index) => item.correct == answers[index]
+          (item, index) => (Number(item.correct) === Number(answers[index])) && (answers[index] !== undefined)
         );
-        console.log("result test - ", resultTest);
+        // console.log("iresultTest - ", iresultTest);
+        // console.log("result test - ", resultTest);
         // setResultTest(resultTest.length)
         setResultTest(iresultTest.length / answers.length);
         setAnswers(answers);
@@ -135,7 +138,7 @@ export const TestTab: FC<TestTabProps> = ({
       <p className="text-center font-medium text-lg mb-3">
         Tổng số câu hỏi: {questions.length}
       </p>
-      {auth && auth.role === 1 ? (
+      {auth && (auth.role === 1) ? (
         <div className="flex items-center gap-2 justify-center mb-3">
           <p className="text-center font-semibold text-xl">Thời gian:</p>
           {isStart ? (
@@ -147,10 +150,16 @@ export const TestTab: FC<TestTabProps> = ({
           )}
         </div>
       ) : null}
-      {resultTest !== undefined && !isStart ? (
+      {(resultTest !== undefined && !isStart) ? (
         <p className="text-center mb-5 text-lg text-secondary font-semibold">
           Số điểm đã đạt được:{" "}
-          <span className="text-secondary">{(resultTest * 10).toFixed(1)}</span>
+          <span className="text-secondary">{(resultTest * 100)}%</span>
+        </p>
+      ) : null}
+      {(auth && auth.role === 2 && resultTest !== undefined) ? (
+        <p className="text-center mb-5 text-lg text-secondary font-semibold">
+          Số điểm đã đạt được:{" "}
+          <span className="text-secondary">{(resultTest * 100)}%</span>
         </p>
       ) : null}
       {!isStart ? (
@@ -168,7 +177,7 @@ export const TestTab: FC<TestTabProps> = ({
               <button
                 className="px-5 py-3 bg-secondary20 text-white font-semibold rounded-lg"
                 onClick={() => {
-                  setAnswers(new Array(questions.length).fill(""));
+                  setAnswers(new Array(questions.length).fill(undefined));
                   setIsStart(true);
                 }}
               >
@@ -179,7 +188,7 @@ export const TestTab: FC<TestTabProps> = ({
             <button
               className="px-5 py-3 bg-secondary20 text-white font-semibold rounded-lg"
               onClick={() => {
-                setAnswers(new Array(questions.length).fill(""));
+                setAnswers(new Array(questions.length).fill(undefined));
                 setIsStart(true);
               }}
             >
@@ -223,7 +232,7 @@ export const TestTab: FC<TestTabProps> = ({
                         ? "border-primary"
                         : "",
 
-                      auth && auth.role === 3 && item.correct === i
+                      auth && (auth.role === 3 || auth.role === 4) && item.correct === i
                         ? "border-primary"
                         : ""
                     )}

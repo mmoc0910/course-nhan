@@ -30,8 +30,8 @@ const RateCourse: FC<RateCourseProps> = ({ courseId }) => {
     return (
       <div>
         <div className="flex items-center mb-5">
-          <Rate className="text-primary"
-            defaultValue={Math.round(totalRate / listRateCourse.length)}
+          <Rate allowHalf className="text-primary"
+            defaultValue={(totalRate / listRateCourse.length)}
             disabled
           />
           <p className="text-xl font-medium">({listRateCourse.length} lượt đánh giá)</p>

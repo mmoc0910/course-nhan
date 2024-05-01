@@ -37,8 +37,8 @@ const DashboardAdmin = () => {
     return (
       <div className="grid grid-cols-3 gap-5">
         <div className="border border-border-gray rounded-xl p-5 space-y-5">
-          <p className="text-2xl font-semibold">Tổng khóa học</p>
-          <p className="text-3xl font-bold">{satify.numberCourse}</p>
+          <p className="text-2xl font-semibold">Tổng giáo viên</p>
+          <p className="text-3xl font-bold">{satify.numberTeacher}</p>
         </div>
         <div className="border border-border-gray rounded-xl p-5 space-y-5">
           <p className="text-2xl font-semibold">Tổng học viên</p>
@@ -49,8 +49,8 @@ const DashboardAdmin = () => {
           <p className="text-3xl font-bold">{satify.numberParent}</p>
         </div>
         <div className="border border-border-gray rounded-xl p-5 space-y-5">
-          <p className="text-2xl font-semibold">Tổng giáo viên</p>
-          <p className="text-3xl font-bold">{satify.numberTeacher}</p>
+          <p className="text-2xl font-semibold">Tổng khóa học</p>
+          <p className="text-3xl font-bold">{satify.numberCourse}</p>
         </div>
         <div className="border border-border-gray rounded-xl p-5 space-y-5">
           <p className="text-2xl font-semibold">Tổng tiền của giáo viên</p>

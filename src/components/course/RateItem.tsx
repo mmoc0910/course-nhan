@@ -20,7 +20,7 @@ const RateItem: FC<RateItemProps> = ({ rate }) => {
           <p className="text-xl font-semibold">{rate.user.name}</p>
           <p className="text-text4">{DAY_FORMAT(rate.updatedAt)}</p>
         </div>
-        <Rate defaultValue={rate.vote} disabled className="mt-3" />
+        <Rate allowHalf defaultValue={rate.vote} disabled className="mt-3" />
         <p className="text-xl font-medium mt-2">{rate.content}</p>
       </div>
     </div>

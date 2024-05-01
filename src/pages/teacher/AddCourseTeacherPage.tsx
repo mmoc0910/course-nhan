@@ -74,7 +74,7 @@ const AddCourseTeacherPage = () => {
         await axiosPrivate.post("/courses", {
           rank: category.rank,
           class: category.class,
-          subject: category.rank,
+          subject: category.subject,
           title,
           description: JSON.stringify({ description, courseObjectives }),
           price,

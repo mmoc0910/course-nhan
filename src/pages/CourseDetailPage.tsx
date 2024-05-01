@@ -195,10 +195,11 @@ const CourseDetailPage = () => {
                         description={course.title}
                         fetchSub={fetchSub}
                       />
-                    ) : (
+                    ) : ( auth.role === 4 || (auth.role === 3 && auth._id === course.teacher._id) ?
                       <ButtonGoLesson courseId={course._id}>
                         Chi tiết khóa học
                       </ButtonGoLesson>
+                      : null
                     )}
                   </>
                 )}

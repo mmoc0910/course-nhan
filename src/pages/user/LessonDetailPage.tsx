@@ -138,7 +138,18 @@ const LessonDetailPage = () => {
           <div className="ml-auto w-[calc(100%-420px)]">
             <div className="px-20 flex items-center justify-between bg-white h-[80px]">
               <Logo className="text-secondary" />
-              <Link to={"/my-class"} className="flex items-center gap-2">
+              <Link
+                to={
+                  auth && auth.role === 2
+                    ? "/parent/list-child"
+                    : auth.role === 4
+                    ? "/admin/courses"
+                    : auth.role === 3
+                    ? "/teacher/my-courses"
+                    : "/my-class"
+                }
+                className="flex items-center gap-2"
+              >
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -189,6 +200,7 @@ const LessonDetailPage = () => {
                             }
                             studentId={auth._id}
                             isRate={
+                              auth.role === 1 &&
                               haveRate &&
                               lessonComplete !== 0 &&
                               lessonComplete === course.listLesson?.length

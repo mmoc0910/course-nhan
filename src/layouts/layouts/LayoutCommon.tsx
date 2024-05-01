@@ -149,7 +149,7 @@ const LayoutCommon = () => {
                       src={info ? info.avatarURL : avatarDefault}
                     />
                     <div className="">
-                      <p className="font-semibold">{auth.username}</p>
+                      <p className="font-semibold">{auth.name}</p>
                       <p className="text-text3 text-sm">
                         {getRoleLabel(auth.role)}
                       </p>
