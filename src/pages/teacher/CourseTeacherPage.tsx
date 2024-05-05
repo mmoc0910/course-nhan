@@ -17,15 +17,17 @@ const tabs: ITab[] = [
   { key: "0", title: "Bị từ chối" },
   { key: "3", title: "Chưa gửi đăng ký" },
 ];
-const CourseTeacherPage = () => {  const dispatch = useDispatch();
+const CourseTeacherPage = () => {
+  const dispatch = useDispatch();
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useSelector((state: RootState) => state.auth);
-  const [courses, setCourses] = useState<CourseType[]>([]);useEffect(() => {
+  const [courses, setCourses] = useState<CourseType[]>([]);
+  useEffect(() => {
     dispatch(
       setBreadcumb([
         {
           title: "Khóa học",
-          url: '/teacher/courses',
+          url: "/teacher/courses",
         },
       ])
     );
@@ -39,7 +41,7 @@ const CourseTeacherPage = () => {  const dispatch = useDispatch();
     try {
       if (auth) {
         const result = await axiosPrivate.get<CourseType[]>(
-          `/courses?teacher=${auth._id}`
+          `/courses?teacher=${auth._id}&status=1`
         );
         console.log("result - ", result.data);
         setCourses(result.data);
@@ -64,6 +66,15 @@ const CourseTeacherPage = () => {  const dispatch = useDispatch();
       } else {
         toast("Bạn chưa thêm bài học");
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDeleteCourse = async (_id: string) => {
+    try {
+      await axiosPrivate.patch(`/courses/${_id}`, { status: 0 });
+      fetchData();
+      toast("Xóa thành công");
     } catch (error) {
       console.log(error);
     }
@@ -137,6 +148,7 @@ const CourseTeacherPage = () => {  const dispatch = useDispatch();
                       item={item}
                       key={item._id}
                       handleSubmitCourse={handleSubmitCourse}
+                      handleDeleteCourse={handleDeleteCourse}
                     />
                   );
                 return;
@@ -153,35 +165,22 @@ export const Courseitem = ({
   item,
   handleSubmitCourse,
   message = true,
+  handleDeleteCourse = () => {},
 }: {
   item: CourseType;
   handleSubmitCourse: (_id: string) => void;
   message?: boolean;
+  handleDeleteCourse?: (_id: string) => void;
 }) => {
-  // const axiosPrivate = useAxiosPrivate();
-  // const { auth } = useSelector((state: RootState) => state.auth);
-  // const [firstLessonId, setFirstLessonId] = useState<string>();
-  // useEffect(() => {
-  //   (async () => {
-  //     if (auth)
-  //       try {
-  //         const result = await axiosPrivate.get<LessonType[]>(
-  //           `/lessons?course=${item._id}`
-  //         );
-  //         if (result.data.length > 0) setFirstLessonId(result.data[0]._id);
-  //       } catch (error) {
-  //         console.log(error);
-  //         // eslint-disable-next-line react-hooks/exhaustive-deps
-  //       }
-  //   })();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
   return (
     <div
       className="w-full rounded-lg border border-gray-soft shadow-xl flex flex-col"
       key={item._id}
     >
-      <img src={item.poster} className="w-full h-[150px] object-cover rounded-tr-lg rounded-tl-lg" />
+      <img
+        src={item.poster}
+        className="w-full h-[150px] object-cover rounded-tr-lg rounded-tl-lg"
+      />
       <div className="p-4 text-lg font-medium flex flex-col justify-between gap-4 flex-1">
         <p className="line-clamp-2">{item.title}</p>
         <div className="space-y-4">
@@ -210,7 +209,7 @@ export const Courseitem = ({
               )}
             </>
           ) : null}
-          {item.approve === 3 ? (
+          {item.approve === 3 || item.approve === 0 ? (
             <Link
               to={`/teacher/courses/lessons/${item._id}`}
               className="w-full py-2 cursor-pointer rounded-lg bg-primary text-white flex items-center justify-center text-sm mt-auto"
@@ -227,7 +226,7 @@ export const Courseitem = ({
             </Link>
           )}
 
-          {item.approve === 3 ? (
+          {item.approve === 3 || item.approve === 0 ? (
             <Link
               to={`/teacher/courses/add-course/${item._id}`}
               className="w-full py-2 rounded-lg bg-secondary20 text-white flex items-center justify-center text-sm"
@@ -236,16 +235,24 @@ export const Courseitem = ({
             </Link>
           ) : null}
         </div>
-        {item.approve === 3 ? (
+        {item.approve === 3 || item.approve === 0 ? (
           <Tooltip title="Sau khi submit khóa học để admin phê duyệt bạn không thể chỉnh sửa khoa học cân nhắc trước khi làm điều đó">
             <button
               onClick={() => handleSubmitCourse(item._id)}
               className="w-full py-2 rounded-lg bg-error text-white flex items-center justify-center text-sm"
             >
-              Gửi đăng ký khóa học
+            {item.approve === 3 ? "Gửi đăng ký khóa học" : "Gửi lại khóa học"}  
             </button>
           </Tooltip>
         ) : null}
+        {(item.approve === 3 || item.approve === 0) && (
+          <button
+            onClick={() => handleDeleteCourse(item._id)}
+            className="w-full py-2 rounded-lg bg-error text-white flex items-center justify-center text-sm"
+          >
+            Xóa khóa học
+          </button>
+        )}
       </div>
     </div>
   );

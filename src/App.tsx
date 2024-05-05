@@ -64,21 +64,15 @@ const ChildrenClassPage = lazy(
 const ChildrenLessonDetailPage = lazy(
   () => import("./pages/parent/ChildrenLessonDetailPage")
 );
-const SearchPage = lazy(
-  () => import("./pages/SearchPage")
-);
-const StudentAdminPage = lazy(
-  () => import("./pages/admin/StudentAdminPage")
-);
-const ParentAdminPage = lazy(
-  () => import("./pages/admin/ParentAdminPage")
-);
-const MyCoursePage = lazy(
-  () => import("./pages/teacher/MyCoursePage")
-);
-const ListChilrenPage = lazy(
-  () => import("./pages/parent/ListChilrenPage")
-);
+const SearchPage = lazy(() => import("./pages/SearchPage"));
+const StudentAdminPage = lazy(() => import("./pages/admin/StudentAdminPage"));
+const ParentAdminPage = lazy(() => import("./pages/admin/ParentAdminPage"));
+const MyCoursePage = lazy(() => import("./pages/teacher/MyCoursePage"));
+const ListChilrenPage = lazy(() => import("./pages/parent/ListChilrenPage"));
+const ChangePasswordPage = lazy(() => import("./pages/ChangePasswordPage"));
+const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
+const CommunityStandardPage = lazy(() => import("./pages/CommunityStandardPage"));
 
 function App() {
   const axiosPrivate = useAxiosPrivate();
@@ -126,6 +120,7 @@ function App() {
         <Routes>
           <Route element={<LayoutCommon />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/community-standard" element={<CommunityStandardPage />} />
             <Route path="/course/:courseId" element={<CourseDetailPage />} />
             <Route path="/account" element={<AcoountUserPage />} />
             <Route path="/parent/child" element={<ChildPage />} />
@@ -137,6 +132,7 @@ function App() {
               path="/children/:childrenId"
               element={<ChildrenClassPage />}
             />
+            <Route path="/change-password" element={<ChangePasswordPage />} />
           </Route>
           <Route element={<LayoutDashboard />}>
             <Route
@@ -172,10 +168,7 @@ function App() {
               path="/teacher/courses/:courseId/lessons/:lessonId/edit-test/:testId"
               element={<EditTestTeacherPage />}
             />
-            <Route
-              path="/teacher/my-courses"
-              element={<MyCoursePage />}
-            />
+            <Route path="/teacher/my-courses" element={<MyCoursePage />} />
             {/* <Route
               path="/account"
               element={<AcoountUserPage />}
@@ -195,6 +188,14 @@ function App() {
               element={<ApproveCourseAdmin />}
             />
             <Route path="/teacher/account" element={<AcoountUserPage />} />
+            <Route
+              path="/teacher/change-password"
+              element={<ChangePasswordPage />}
+            />
+            <Route
+              path="/admin/change-password"
+              element={<ChangePasswordPage />}
+            />
           </Route>
           <Route
             path="/course/:courseId/lesson/:lessonId"
@@ -206,6 +207,8 @@ function App() {
           />
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignupPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
           <Route
             path="*"
             element={

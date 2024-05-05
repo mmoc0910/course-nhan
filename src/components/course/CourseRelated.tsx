@@ -12,7 +12,7 @@ const CourseRelated: FC<CourseRelatedProps> = ({ course }) => {
       try {
         const { subject, _id } = course;
         const result = await api.get<CourseType[]>(
-          `/courses?subject=${subject}`
+          `/courses?subject=${subject}&status=1`
         );
         setRelatedCourses(result.data.filter((item) => item._id !== _id));
       } catch (error) {

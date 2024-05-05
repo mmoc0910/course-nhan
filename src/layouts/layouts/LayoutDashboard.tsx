@@ -16,6 +16,7 @@ const teacherMenus = [
   { title: "Đăng ký khóa học", url: "/teacher/courses" },
   { title: "Khóa học của tôi", url: "/teacher/my-courses" },
   { title: "Tài khoản của tôi", url: "/teacher/account" },
+  { title: "Đổi mật khẩu", url: "/teacher/change-password" },
 ];
 const adminMenus = [
   { title: "Thống kê", url: "/admin/dashboard" },
@@ -26,6 +27,7 @@ const adminMenus = [
   { title: "Phê duyệt khóa học", url: "/admin/approve-courses" },
   { title: "Khóa học", url: "/admin/courses" },
   { title: "Tài khoản của tôi", url: "/admin/account" },
+  { title: "Đổi mật khẩu", url: "/admin/change-password" },
 ];
 const LayoutDashboard = () => {
   const navigate = useNavigate();

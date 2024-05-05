@@ -9,9 +9,7 @@ import { IntroduceType } from "../../types";
 import avatarDefault from "../../assets/images/avatar.png";
 import { useState } from "react";
 
-const adminMenus = [
-  { title: "Đến trang quản lý", url: "/admin/dashboard" }
-];
+const adminMenus = [{ title: "Đến trang quản lý", url: "/admin/dashboard" }];
 
 const teacherMenus = [
   { title: "Đến trang quản lý", url: "/teacher/dashboard" },
@@ -21,11 +19,13 @@ const parentMenus = [
   { title: "Tài khoản của con", url: "/parent/list-child" },
   { title: "Thêm tài khoản cho con", url: "/parent/child" },
   { title: "Thông tin tài khoản", url: "/account" },
+  { title: "Đổi mật khẩu", url: "/change-password" },
 ];
 
 const studentMenus = [
   { title: "Khóa học của tôi", url: "/my-class" },
   { title: "Thông tin tài khoản", url: "/account" },
+  { title: "Đổi mật khẩu", url: "/change-password" },
 ];
 
 const LayoutCommon = () => {
@@ -41,10 +41,10 @@ const LayoutCommon = () => {
     ? auth.role === 1
       ? studentMenus
       : auth.role === 2
-        ? parentMenus
-        : auth.role === 3
-          ? teacherMenus
-          : adminMenus
+      ? parentMenus
+      : auth.role === 3
+      ? teacherMenus
+      : adminMenus
     : [];
   const info = auth?.description
     ? (JSON.parse(auth.description) as IntroduceType)
@@ -224,7 +224,7 @@ const LayoutCommon = () => {
           Hỗ trợ
         </Link>
         <Link
-          to={"/"}
+          to={"/community-standard"}
           className="text-icon-color hover:text-black transition-all duration-300 hover:underline"
         >
           Quy chuẩn cộng đồng

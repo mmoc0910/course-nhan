@@ -16,6 +16,7 @@ import { api } from "../api";
 import { RootState } from "../store/configureStore";
 import { AuthType } from "../types";
 import { signIn } from "../store/auth/authSlice";
+import { passwordRegex } from "../constanst";
 
 const schema = yup
   .object({
@@ -24,7 +25,10 @@ const schema = yup
       .string()
       .required("Mật khẩu không được để trống")
       .min(8, "Mật khẩu tối thiểu 8 ký tự")
-      .max(30, "Mật khẩu tối đa 30 ký tự"),
+      .max(30, "Mật khẩu tối đa 30 ký tự")
+      .matches(passwordRegex, {
+        message: "Mật khẩu tối thiểu 8 ký tự, bao gồm cả chữ và số",
+      }),
   })
   .required();
 const SignInPage = () => {
@@ -102,9 +106,12 @@ const SignInPage = () => {
           </Input>
         </FormGroup>
         <div className="flex justify-end">
-          <p className="text-sm font-medium cursor-pointer select-none text-primary">
+          <Link
+            to={"/forgot-password"}
+            className="text-sm font-medium cursor-pointer select-none text-primary"
+          >
             Quên mật khẩu?
-          </p>
+          </Link>
         </div>
         <button
           type="submit"

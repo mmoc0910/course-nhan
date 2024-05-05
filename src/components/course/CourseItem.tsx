@@ -6,9 +6,9 @@ type CourseItemProps = { course: CourseType };
 const CourseItem: FC<CourseItemProps> = ({ course }) => {
   return (
     <div className="w-full rounded-lg overflow-hidden border border-gray-soft relative">
-      <p className="bg-secondary40 text-xs text-white px-2 py-1 rounded-tl-lg rounded-br-lg absolute left-0 top-0">
+      {/* <p className="bg-secondary40 text-xs text-white px-2 py-1 rounded-tl-lg rounded-br-lg absolute left-0 top-0">
         New
-      </p>
+      </p> */}
       <img src={course.poster} className="w-full h-[150px] object-cover" />
       <div className="p-4 text-lg font-medium space-y-4">
         <p className="line-clamp-2">{course.title}</p>

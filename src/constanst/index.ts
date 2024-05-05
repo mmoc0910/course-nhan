@@ -207,3 +207,5 @@ export const VND = new Intl.NumberFormat("en-US", {
   // style: "currency",
   currency: "USD",
 });
+
+export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;

@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { uploadFireStore } from "../utils/uploadFireStore";
 import { api } from "../api";
+import { passwordRegex } from "../constanst";
 
 const roles = [
   { role: 1, title: "Học sinh" },
@@ -35,7 +36,10 @@ const schema = yup
       .string()
       .required("Mật khẩu không được để trống")
       .min(8, "Mật khẩu tối thiểu 8 ký tự")
-      .max(30, "Mật khẩu tối đa 30 ký tự"),
+      .max(30, "Mật khẩu tối đa 30 ký tự")
+      .matches(passwordRegex, {
+        message: "Mật khẩu tối thiểu 8 ký tự, bao gồm cả chữ và số",
+      }),
     role: yup.number().required().positive().integer(),
   })
   .required();
@@ -194,7 +198,9 @@ const SignupPage = () => {
                   </svg>
                 </span>
                 <p className="line-clamp-1">
-                  {certificate ? certificate.name : "Upload chứng chỉ của bạn (PDF)"}
+                  {certificate
+                    ? certificate.name
+                    : "Upload chứng chỉ của bạn (PDF)"}
                 </p>
               </div>
             </label>

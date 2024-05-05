@@ -5,16 +5,22 @@ import Satify from "../components/home/Satify";
 import MenuSidebar from "../components/sidebar/MenuSidebar";
 import { CourseType } from "../types";
 import { api } from "../api";
+import { listCategory } from "../constanst";
+import RankSectionCourse from "../components/home/RankSectionCourse";
 
 const HomePage = () => {
-  const [courses, setCourses] = useState<CourseType[]>([]);
-  console.log("course - ", courses);
+  const [newCourses, setNewCourse] = useState<CourseType[]>([]);
+  const [topCourses, setTopCourse] = useState<CourseType[]>([]);
   useEffect(() => {
     (async () => {
       try {
-        const result = await api.get<CourseType[]>(`/courses?approve=1`);
-        console.log("result - ", result.data);
-        setCourses(result.data);
+        const [{ data: dataNewCourses }, { data: dataTopCourse }] =
+          await Promise.all([
+            api.get<CourseType[]>(`/courses/new`),
+            api.get<{ course: CourseType[] }[]>(`/subs/top`),
+          ]);
+        setNewCourse(dataNewCourses);
+        setTopCourse(dataTopCourse.map((item) => item.course[0]));
       } catch (error) {
         console.log(error);
       }
@@ -38,18 +44,15 @@ const HomePage = () => {
         </div>
       </div>
       <Satify />
-      <CourseList
-        heading="Tiểu học"
-        courses={courses.filter((item) => item.rank === 1)}
-      />
-      <CourseList
-        heading="Trung học cơ sở"
-        courses={courses.filter((item) => item.rank === 20)}
-      />
-      <CourseList
-        heading="Trung học phổ thông"
-        courses={courses.filter((item) => item.rank === 48)}
-      />
+      {newCourses.length > 0 && (
+        <CourseList heading="Khóa học mới nhất" courses={newCourses} />
+      )}
+      {topCourses.length > 0 && (
+        <CourseList heading="Khóa học bán chạy nhất" courses={topCourses} />
+      )}
+      {listCategory.map((item) => (
+        <RankSectionCourse key={item.id} rank={item} />
+      ))}
     </div>
   );
 };

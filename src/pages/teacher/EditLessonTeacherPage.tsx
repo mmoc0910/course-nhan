@@ -3,7 +3,7 @@ import * as yup from "yup";
 import FormGroup from "../../components/common/FormGroup";
 import { Label } from "../../components/label";
 import { Input } from "../../components/input";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DocumentType, LessonType } from "../../types";
@@ -14,6 +14,8 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "react-toastify";
 import { setBreadcumb } from "../../store/breadcumb/breadcumbSlice";
 import { useDispatch } from "react-redux";
+import AddDocuments from "../../components/common/AddDocuments";
+import EditDocument from "../../components/common/EditDocument";
 
 const modules = {
   toolbar: [
@@ -47,7 +49,7 @@ const EditLessonTeacherPage = () => {
     resolver: yupResolver(schema),
     mode: "onSubmit",
   });
-  const titleWatch = watch('title')
+  const titleWatch = watch("title");
   useEffect(() => {
     dispatch(
       setBreadcumb([
@@ -117,6 +119,11 @@ const EditLessonTeacherPage = () => {
   const handleContentDebouncedChange = (value: string) => {
     debouncedContentChange(value);
   };
+  const handleAddDocument = useCallback(
+    (title: string, url: string) =>
+      setPdfs((prev) => [...prev, { title, url }]),
+    []
+  );
   return (
     <form className="grid grid-cols-2 gap-5" onSubmit={handleSubmit(onSubmit)}>
       <FormGroup>
@@ -127,7 +134,28 @@ const EditLessonTeacherPage = () => {
         <Label htmlFor="video">Link video bài giảng*</Label>
         <Input name="video" control={control} />
       </FormGroup>
-      <div className="col-span-2 grid grid-cols-2 gap-5">
+      <FormGroup className="col-span-2 ">
+        <Label className="col-span-2">Tài liệu bài giảng</Label>
+        <AddDocuments handleAddDocument={handleAddDocument} />
+        <div className="space-y-2">
+          {pdfs.map((item, index) => (
+            <EditDocument
+              key={uuidv4()}
+              document={item}
+              handleEditDocument={(title, url) =>
+                setPdfs((prev) =>
+                  prev.map((item, i) => (i === index ? { title, url } : item))
+                )
+              }
+              handleDeleteDocument={() =>
+                setPdfs((prev) => prev.filter((_, i) => i !== index))
+              }
+              index={index}
+            />
+          ))}
+        </div>
+      </FormGroup>
+      {/* <div className="col-span-2 grid grid-cols-2 gap-5">
         <Label className="col-span-2">Tài liệu bài giảng</Label>
         {pdfs.map((item, index) => (
           <div className="grid grid-cols-2 gap-5" key={uuidv4()}>
@@ -185,7 +213,7 @@ const EditLessonTeacherPage = () => {
             Thêm tài liệu
           </button>
         </div>
-      </div>
+      </div> */}
       <FormGroup className="col-span-2">
         <Label>Mô tả bài học</Label>
         <ReactQuill

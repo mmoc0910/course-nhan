@@ -14,7 +14,7 @@ import { Input } from "../../components/input";
 import { useToogleValue } from "../../hooks/useToogleValue";
 import IconEyeToogle from "../../icons/IconEyeToogle";
 import { Table, TableProps } from "antd";
-import { DAY_FORMAT } from "../../constanst";
+import { DAY_FORMAT, passwordRegex } from "../../constanst";
 import { Link } from "react-router-dom";
 
 const schema = yup
@@ -29,7 +29,10 @@ const schema = yup
       .string()
       .required("Mật khẩu không được để trống")
       .min(8, "Mật khẩu tối thiểu 8 ký tự")
-      .max(30, "Mật khẩu tối đa 30 ký tự"),
+      .max(30, "Mật khẩu tối đa 30 ký tự")
+      .matches(passwordRegex, {
+        message: "Mật khẩu tối thiểu 8 ký tự, bao gồm cả chữ và số",
+      }),
   })
   .required();
 const ChildPage = () => {
@@ -96,7 +99,10 @@ const ChildPage = () => {
         dataIndex: "name",
         key: "name",
         render: (text, record) => (
-          <Link to={`/children/${record._id}`} className="font-primary text-primary underline">
+          <Link
+            to={`/children/${record._id}`}
+            className="font-primary text-primary underline"
+          >
             {text}
           </Link>
         ),
