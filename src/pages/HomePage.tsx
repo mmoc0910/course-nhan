@@ -11,16 +11,17 @@ import RankSectionCourse from "../components/home/RankSectionCourse";
 const HomePage = () => {
   const [newCourses, setNewCourse] = useState<CourseType[]>([]);
   const [topCourses, setTopCourse] = useState<CourseType[]>([]);
+  console.log(topCourses)
   useEffect(() => {
     (async () => {
       try {
         const [{ data: dataNewCourses }, { data: dataTopCourse }] =
           await Promise.all([
             api.get<CourseType[]>(`/courses/new`),
-            api.get<{ course: CourseType[] }[]>(`/subs/top`),
+            api.get<{ course: CourseType }[]>(`/subs/top`),
           ]);
         setNewCourse(dataNewCourses);
-        setTopCourse(dataTopCourse.map((item) => item.course[0]));
+        setTopCourse(dataTopCourse.map((item) => item.course));
       } catch (error) {
         console.log(error);
       }

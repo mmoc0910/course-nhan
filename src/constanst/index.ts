@@ -154,14 +154,30 @@ export const listCategory: Category[] = [
       },
     ],
   },
-  // {
-  //   id: 76,
-  //   title: "Cao đẳng - Đại học",
-  //   childrens: [
-  //     { id: 78, title: "Toán cao cấp" },
-  //     { id: 79, title: "Toiec" },
-  //   ],
-  // },
+  {
+    id: 76,
+    title: "Cao đẳng - Đại học",
+    childrens: [
+      {
+        id: 77,
+        title: "Năm 1",
+        childrens: [
+          { id: 78, title: "Toán cao cấp" },
+          { id: 79, title: "Đại số tuyến tính" },
+          { id: 80, title: "Vật lý đại cương" },
+          { id: 81, title: "Triết học" },
+        ],
+      },
+      {
+        id: 82,
+        title: "Năm 2",
+        childrens: [
+          { id: 83, title: "Phương pháp tính" },
+          { id: 84, title: "Lập trình căn bản" },
+        ],
+      },
+    ],
+  },
 ];
 
 const roles = [
@@ -208,4 +224,4 @@ export const VND = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
