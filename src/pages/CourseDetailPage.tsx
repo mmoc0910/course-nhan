@@ -168,11 +168,14 @@ const CourseDetailPage = () => {
                           style={{ layout: "horizontal", height: 35 }}
                           createOrder={(_data, actions) => {
                             return actions.order.create({
+                              intent: "CAPTURE",
                               purchase_units: [
                                 {
                                   description: course.title,
-                                  amount: { value: `${course.price}` },
-                                  currency_code: "USD",
+                                  amount: {
+                                    value: `${course.price}`,
+                                    currency_code: "USD",
+                                  },
                                 },
                               ],
                             });
@@ -329,11 +332,11 @@ const ButtonPayment = ({
               style={{ layout: "horizontal", height: 35 }}
               createOrder={(_data, actions) => {
                 return actions.order.create({
+                  intent: "CAPTURE",
                   purchase_units: [
                     {
                       description,
-                      amount: { value: amount },
-                      currency_code: "USD",
+                      amount: { value: amount, currency_code: "USD" },
                     },
                   ],
                 });
