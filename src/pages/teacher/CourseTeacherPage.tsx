@@ -190,7 +190,7 @@ export const Courseitem = ({
                 <p className="text-error text-center text-sm">
                   Khóa học của bạn bị từ chối vì vi phạm{" "}
                   <Link
-                    to={"/"}
+                    to={"/community-standard"}
                     className="text-secondary underline decoration-secondary"
                   >
                     quy tắc cộng đồng
@@ -212,7 +212,7 @@ export const Courseitem = ({
           {item.approve === 3 || item.approve === 0 ? (
             <Link
               to={`/teacher/courses/lessons/${item._id}`}
-              className="w-full py-2 cursor-pointer rounded-lg bg-primary text-white flex items-center justify-center text-sm mt-auto"
+              className="w-full py-2 cursor-pointer rounded-lg bg-teal-500 text-white flex items-center justify-center text-sm mt-auto"
             >
               Chỉnh sửa nội dung khóa học
             </Link>
@@ -229,7 +229,7 @@ export const Courseitem = ({
           {item.approve === 3 || item.approve === 0 ? (
             <Link
               to={`/teacher/courses/add-course/${item._id}`}
-              className="w-full py-2 rounded-lg bg-secondary20 text-white flex items-center justify-center text-sm"
+              className="w-full py-2 rounded-lg bg-indigo-500 text-white flex items-center justify-center text-sm"
             >
               Chỉnh sửa thông tin khóa học
             </Link>
@@ -239,7 +239,7 @@ export const Courseitem = ({
           <Tooltip title="Sau khi submit khóa học để admin phê duyệt bạn không thể chỉnh sửa khoa học cân nhắc trước khi làm điều đó">
             <button
               onClick={() => handleSubmitCourse(item._id)}
-              className="w-full py-2 rounded-lg bg-error text-white flex items-center justify-center text-sm"
+              className="w-full py-2 rounded-lg bg-primary text-white flex items-center justify-center text-sm"
             >
             {item.approve === 3 ? "Gửi đăng ký khóa học" : "Gửi lại khóa học"}  
             </button>
@@ -248,7 +248,7 @@ export const Courseitem = ({
         {(item.approve === 3 || item.approve === 0) && (
           <button
             onClick={() => handleDeleteCourse(item._id)}
-            className="w-full py-2 rounded-lg bg-error text-white flex items-center justify-center text-sm"
+            className="w-full py-2 rounded-lg bg-rose-400 text-white flex items-center justify-center text-sm"
           >
             Xóa khóa học
           </button>

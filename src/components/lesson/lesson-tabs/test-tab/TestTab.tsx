@@ -153,13 +153,13 @@ export const TestTab: FC<TestTabProps> = ({
       {(resultTest !== undefined && !isStart) ? (
         <p className="text-center mb-5 text-lg text-secondary font-semibold">
           Số điểm đã đạt được:{" "}
-          <span className="text-secondary">{(resultTest * 100)}%</span>
+          <span className="text-secondary">{(resultTest * 100).toFixed(1)}%</span>
         </p>
       ) : null}
       {(auth && auth.role === 2 && resultTest !== undefined) ? (
         <p className="text-center mb-5 text-lg text-secondary font-semibold">
           Số điểm đã đạt được:{" "}
-          <span className="text-secondary">{(resultTest * 100)}%</span>
+          <span className="text-secondary">{(resultTest * 100).toFixed(1)}%</span>
         </p>
       ) : null}
       {!isStart ? (

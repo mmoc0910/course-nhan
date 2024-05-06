@@ -76,7 +76,7 @@ const LearningProcess: FC<LearningProcessProps> = ({
           if (data)
             return (
               <p className="font-primary">
-                {((data.totalCorrect * 10) / data.totalQuestion).toFixed(1)}
+                {((data.totalCorrect) / data.totalQuestion * 100).toFixed(1)}%
               </p>
             );
           return <p className="font-primary">Chưa làm</p>;

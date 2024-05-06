@@ -30,6 +30,7 @@ type CourseTopType = {
 const HomePage = () => {
   const [newCourses, setNewCourse] = useState<CourseType[]>([]);
   const [topCourses, setTopCourse] = useState<CourseType[]>([]);
+  console.log(topCourses)
   useEffect(() => {
     (async () => {
       try {

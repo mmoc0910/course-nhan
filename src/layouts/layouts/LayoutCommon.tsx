@@ -110,7 +110,7 @@ const LayoutCommon = () => {
             {auth ? (
               <>
                 <div className="relative group">
-                  <div className="absolute w-max top-[calc(100%+20px)] right-0 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-hover:top-full transition-all duration-300">
+                  <div className="absolute w-max z-50 top-[calc(100%+20px)] right-0 invisible opacity-0 group-hover:visible group-hover:opacity-100 group-hover:top-full transition-all duration-300">
                     <div className="mt-3 bg-white shadow-xl rounded-xl border border-border-gray">
                       {menus.map((item, index) => (
                         <NavLink
@@ -227,7 +227,7 @@ const LayoutCommon = () => {
           to={"/community-standard"}
           className="text-icon-color hover:text-black transition-all duration-300 hover:underline"
         >
-          Quy chuẩn cộng đồng
+          Tiêu chuẩn cộng đồng
         </Link>
       </div>
       <div className="pb-20">
