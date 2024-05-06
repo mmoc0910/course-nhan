@@ -170,8 +170,8 @@ const CourseDetailPage = () => {
                             return actions.order.create({
                               purchase_units: [
                                 {
-                                  description,
-                                  amount: { value: String(course.price) },
+                                  description: course.title,
+                                  amount: { value: `${course.price}` },
                                   currency_code: "USD",
                                 },
                               ],
@@ -195,12 +195,12 @@ const CourseDetailPage = () => {
                         description={course.title}
                         fetchSub={fetchSub}
                       />
-                    ) : ( auth.role === 4 || (auth.role === 3 && auth._id === course.teacher._id) ?
+                    ) : auth.role === 4 ||
+                      (auth.role === 3 && auth._id === course.teacher._id) ? (
                       <ButtonGoLesson courseId={course._id}>
                         Chi tiết khóa học
                       </ButtonGoLesson>
-                      : null
-                    )}
+                    ) : null}
                   </>
                 )}
               </div>

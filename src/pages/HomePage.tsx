@@ -3,11 +3,30 @@ import HomeBanner from "../components/banners/HomeBanner";
 import CourseList from "../components/home/CourseList";
 import Satify from "../components/home/Satify";
 import MenuSidebar from "../components/sidebar/MenuSidebar";
-import { CourseType } from "../types";
+import { AuthType, CourseType, LessonType } from "../types";
 import { api } from "../api";
 import { listCategory } from "../constanst";
 import RankSectionCourse from "../components/home/RankSectionCourse";
 
+type CourseTopType = {
+  _id: string;
+  rank: number;
+  class: number;
+  title: string;
+  description: string;
+  poster: string;
+  price: number;
+  rose: number;
+  status: 0 | 1;
+  approve: 0 | 1 | 2 | 3; // 1: approve 0:reject 2:pending 3:notsubmit
+  teacher: AuthType[];
+  createdAt: Date;
+  updatedAt: Date;
+  subject: number;
+  listLesson: LessonType[];
+  totalTest: number;
+  totalLesson: number;
+};
 const HomePage = () => {
   const [newCourses, setNewCourse] = useState<CourseType[]>([]);
   const [topCourses, setTopCourse] = useState<CourseType[]>([]);
@@ -17,10 +36,15 @@ const HomePage = () => {
         const [{ data: dataNewCourses }, { data: dataTopCourse }] =
           await Promise.all([
             api.get<CourseType[]>(`/courses/new`),
-            api.get<{ course: CourseType[] }[]>(`/subs/top`),
+            api.get<{ course: CourseTopType }[]>(`/subs/top`),
           ]);
         setNewCourse(dataNewCourses);
-        setTopCourse(dataTopCourse.map((item) => item.course[0]));
+        setTopCourse(
+          dataTopCourse.map((item) => ({
+            ...item.course,
+            teacher: item.course.teacher[0],
+          }))
+        );
       } catch (error) {
         console.log(error);
       }
