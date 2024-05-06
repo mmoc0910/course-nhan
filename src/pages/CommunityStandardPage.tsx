@@ -23,7 +23,7 @@ const CommunityStandardPage = () => {
             Với mục đích đảm bảo rằng mọi giáo viên đăng ký trên ứng dụng phải đáp
             ứng các tiêu chuẩn nghiệp vụ và đạo đức nghề nghiệp cao nhất.
           </p>
-          <ul>
+          <ul className="list-disc ml-9">
             <li><strong>Điều kiện Đăng Ký: </strong> Người dùng muốn đăng ký làm giáo
               viên cần cung cấp thông tin cá nhân đầy đủ và phải tải lên chứng chỉ hành
               nghề hợp lệ.</li>
@@ -42,7 +42,7 @@ const CommunityStandardPage = () => {
           <h2 className="font-semibold text-xl">
             2. Đăng Tải Khóa Học
           </h2>
-          <ul>
+          <ul className="list-disc ml-9">
             <li><strong>Quyền Đăng Tải: </strong>Chỉ giáo viên đã được phê duyệt mới có quyền đăng tải khóa học lên nền tảng.</li>
             <li><strong>Nội Dung Khóa Học: </strong>Nội dung khóa học cần rõ ràng, có cấu trúc và không chứa thông tin sai lệch hoặc bất kỳ nội dung bất hợp pháp nào.
             </li>
@@ -58,7 +58,7 @@ const CommunityStandardPage = () => {
           <p className="mb-5">
             Bình luận phải mang tính xây dựng, liên quan trực tiếp đến nội dung bài học và tạo môi trường học tập tích cực.
           </p>
-          <ul>
+          <ul className="list-disc ml-9">
             <li><strong>Ngôn Từ: </strong>Tránh sử dụng ngôn từ thô tục, xúc phạm hoặc kỳ thị. Bình luận không được chứa quảng cáo hoặc spam.</li>
             <li><strong>Quản Lý Bình Luận: </strong>Giáo viên và ADMIN có quyền xóa bình luận không phù hợp hoặc vi phạm tiêu chuẩn của nền tảng.
             </li>
@@ -73,7 +73,7 @@ const CommunityStandardPage = () => {
           <p className="mb-5">
             Đánh giá khóa học nhằm mục đích đánh giá chất lượng và hiệu quả của khóa học, từ đó cung cấp thông tin phản hồi cho giáo viên và quản trị viên để cải thiện trải nghiệm học tập cho học viên và nâng cao chất lượng của khóa học trong tương lai.
           </p>
-          <ul>
+          <ul className="list-disc ml-9">
             <li><strong>Điều Kiện Đánh Giá: </strong>Chỉ học viên đã hoàn thành khóa học mới có quyền đánh giá khóa học.</li>
             <li><strong>Thang Điểm: </strong>Đánh giá phải được thực hiện một cách công bằng và khách quan.
             </li>
@@ -86,18 +86,20 @@ const CommunityStandardPage = () => {
           <h2 className="font-semibold text-xl">
             5. Khóa tài khoản của người dùng.
           </h2>
-          <p className="mb-2">
-            Admin có quyền block các tài khoản khác nếu phát hiện vi phạm tiêu chuẩn cộng đồng.
-          </p>
-          <p className="mb-2">
-          Việc này nhằm bảo vệ môi trường học tập trực tuyến, đảm bảo rằng các người dùng tuân thủ quy định và không gây ra bất kỳ vấn đề nào cho cộng đồng.
-          </p>
-          <p className="mb-2">
-          Khi một tài khoản bị block, người dùng sẽ mất quyền truy cập vào các chức năng và nội dung của ứng dụng, và chỉ có thể khôi phục tài khoản sau khi đã giải quyết vấn đề và được phê duyệt lại bởi ADMIN.
-          </p>
-          <p className="mb-2">
-          Quyền block tài khoản là một biện pháp quan trọng để duy trì sự an toàn và tính chất chuyên nghiệp của nền tảng học tập.
-          </p>
+          <ul className="list-disc ml-9">
+            <li className="mb-1">
+              Admin có quyền block các tài khoản khác nếu phát hiện vi phạm tiêu chuẩn cộng đồng.
+            </li>
+            <li className="mb-1">
+              Việc này nhằm bảo vệ môi trường học tập trực tuyến, đảm bảo rằng các người dùng tuân thủ quy định và không gây ra bất kỳ vấn đề nào cho cộng đồng.
+            </li>
+            <li className="mb-1">
+              Khi một tài khoản bị block, người dùng sẽ mất quyền truy cập vào các chức năng và nội dung của ứng dụng, và chỉ có thể khôi phục tài khoản sau khi đã giải quyết vấn đề và được phê duyệt lại bởi ADMIN.
+            </li>
+            <li className="mb-1">
+              Quyền block tài khoản là một biện pháp quan trọng để duy trì sự an toàn và tính chất chuyên nghiệp của nền tảng học tập.
+            </li>
+          </ul>
           {/* <img
             className="w-5/6 h-auto mx-auto mb-5"
             src="https://images.unsplash.com/photo-1714786479680-d0c30f22dd29?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

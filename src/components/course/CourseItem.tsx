@@ -11,7 +11,7 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
       </p> */}
       <img src={course.poster} className="w-full h-[150px] object-cover" />
       <div className="p-4 text-lg font-medium space-y-4">
-        <p className="line-clamp-2">{course.title}</p>
+        <p className="line-clamp-2 h-[56px]">{course.title}</p>
         <p className="text-xs">
           Giáo viên:{" "}
           <Link to={"/"} className="text-primary font-medium">
