@@ -21,7 +21,7 @@ const schema = yup
       .min(8, "Mật khẩu tối thiểu 8 ký tự")
       .max(30, "Mật khẩu tối đa 30 ký tự")
       .matches(passwordRegex, {
-        message: "Mật khẩu tối thiểu 8 ký tự, bao gồm cả chữ và số",
+        message: "Mật khẩu phải bao gồm: chữ thường, chữ in hoa, ký đặc biệt và chữ số",
       }),
     re_password: yup.string().required("Xác nhận mật khẩu không được để trống"),
   })
