@@ -14,6 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       options={{
         clientId:
           "AbMRMQ2KAg1sgWoOwL70oSNvGVTUr7I0yS-bIwy1b5nXmA10Kyze5msn_Z2gxf880BQUbsdw5yKORTAV",
+        currency: "USD",
       }}
     >
       <Provider store={store}>
